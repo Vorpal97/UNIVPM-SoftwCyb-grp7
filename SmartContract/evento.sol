@@ -15,16 +15,17 @@ contract Evento {
         string owenerAddress;
     }
 
+    uint256 seed;
     string eventManager;
     string buyer;
     string reseller;
-    string validator
+    string validator;
 
     enum status { onsale, suspended, soldout, deleted }
-
     string nome;
     string data;
     uint256 numPosti;
+    uint256 postiDisponibili;
     uint256 prezzoBiglietto;
     string luogo;
     status stato;
@@ -42,16 +43,11 @@ contract Evento {
         nome = _nome;
         data = _data;
         numPosti = _numPosti;
+        postiDisponibili = _numPosti;
         prezzoBiglietto = _prezzoBiglietto;
         luogo = _luogo;
         stato = status.onsale;
     }
-
-    function venditaBiglietto(string memory owenerAddress) public {
-        listaBiglietti.push(Biglietto(ticketCounter, "", true, owenerAddress));
-        ticketCounter++;
-    }
-
 
     function getNome() public view returns (string memory){
         return nome;
@@ -85,5 +81,21 @@ contract Evento {
         return (listaBiglietti[ticketId].validateHash, listaBiglietti[ticketId].isValid, listaBiglietti[ticketId].owenerAddress);
     }
 
+    function sigillaBiglietto(uint256 ticketCounter, string memory ownerAddress){
+      return keccak256(abi.encodePacked(ticketCounter, ownerAddress, address(this)));
+    }
+
+    function venditaBiglietto(string memory owenerAddress) public view returns (string memory) {
+      if(postiDisponibili > 0){
+        string ownerAddress = msg.sender;
+        string sigillo = sigillaBiglietto(ticketCounter, ownerAddress);
+        listaBiglietti.push(Biglietto(ticketCounter, sigillo, true, owenerAddress));
+        ticketCounter++;
+        postiDisponibili--;
+        return (ticketCounter, sigillo, owenerAddress);
+      } else {
+        return "Posti esauriti";
+      }
+    }
 
 }
