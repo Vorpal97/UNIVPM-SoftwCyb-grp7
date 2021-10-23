@@ -8,6 +8,15 @@ const cont = new Contract();
 var abi = cont.abi;
 var bytecode = cont.bytecode;
 
+var address_list_tmp = [];
+fs = require('fs')
+fs.readFile('accounts.txt', 'utf8', function (err,data) {
+  if (err) {
+    return console.log(err);
+  }
+  address_list_tmp = data.split("\n");
+  address_list_tmp.pop();
+});
 
 web3.eth.getAccounts().then((value)=> {
   console.log("Accounts: " + value);
@@ -18,9 +27,21 @@ function sleep(ms){
   return new Promise(resolve =>setTimeout(resolve, ms));
 }
 
+function popList(list, pattern){
+  var tmp = [];
+  for(i = 0; i < list.length; i++){
+    if(list[i] != pattern){12
+      tmp.push(list[i]);
+    }
+  }
+  return tmp;
+}
+
 
 function demo(a){
   console.log("used account: " + a);
+
+  address_list = popList(address_list_tmp, a);
 
   var simpleContract = new web3.eth.Contract(abi, { from: a });
   var simple = simpleContract.deploy({from: a, data:"0x" + bytecode.object}).
@@ -31,11 +52,11 @@ function demo(a){
   var address;
 
   // INFORMAZIONI EVENTO
-  var nome = "Concerto";
+  var nome = "Suca";
   var data = "10/10/2021"
-  var numPosti = 100;
-  var prezzoBiglietto = 5;
-  var luogo = "Ancona";
+  var numPosti = 5;
+  var prezzoBiglietto = 10;
+  var luogo = "SucaSuca";
 	var ticketCounter = 0;
 
 
@@ -69,12 +90,17 @@ function demo(a){
       var contract = new Contract(abi, address);
 
       //SCRIVERE
-			/*
-			contract.methods.setup(a,0,0,0).send({from: a})
+
+			contract.methods.setup(a, address_list[0], address_list[1], address_list[2]).send({from: a})
       .on('receipt', function(){
-          console.log("eventManager " + a + " set");
+
+        console.log("Address impostati: \n" +
+                    " eventManager -> " + a +
+                    "\n buyer - > " + address_list[0] +
+                    "\n reseller - > " + address_list[1] +
+                    "\n validator - > " + address_list[2]);
       });
-			*/
+
       contract.methods.creaEvento(nome, data, numPosti, prezzoBiglietto, luogo, ticketCounter).send({from: a})
       .on('receipt', function(){
           console.log("New event " + nome + " created");

@@ -31,15 +31,17 @@ contract Evento {
     status stato;
     Biglietto[] listaBiglietti;
     uint256 ticketCounter;
+    bool initialization = true;
 
-/*
     function setup(address payable _eventManager, address _buyer, address _reseller, address _validator) public {
-        eventManager = _eventManager;
-        buyer = _buyer;
-        reseller = _reseller;
-        validator = _validator;
+        if(initialization){
+            eventManager = _eventManager;
+            buyer = _buyer;
+            reseller = _reseller;
+            validator = _validator;
+            initialization = false;
+        }
     }
-*/
     function creaEvento(string memory _nome, string memory _data, uint256 _numPosti, uint256 _prezzoBiglietto, string memory _luogo, uint256 _ticketCounter) public {
         nome = _nome;
         data = _data;

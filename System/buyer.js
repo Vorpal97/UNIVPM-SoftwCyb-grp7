@@ -21,7 +21,7 @@ function sleep(ms){
 function demo(a){
   console.log("used account: " + a);
 
-  var address = "0x744732A694CBda311676e38d7B26d336d2e74383";
+  var address = "0xF8BD2aE8D638D61626Fe9820cd2cCc9fe6A81101";
 
 
   //var Contract = new web3.eth.contract.setProvider()
@@ -78,11 +78,6 @@ function demo(a){
     console.log("getPrezzoBiglietto() -> " + a);
   });
 
-  contract.methods.getAddressChiamante().call()
-  .then((a) => {
-    console.log("getAddressChiamante() -> " + a);
-  });
-
   contract.methods.venditaBiglietto(a).send({from: a})
     .on('receipt', function(){
         console.log("Biglietto comprato");
@@ -105,15 +100,26 @@ function demo(a){
 	contract.methods.onSale().call()
 	.then((result) => {
 		if(result == true){
-			var ticketNumber;
+
+      contract.methods.getAddressChiamante().call({from: a})
+      .then((a) => {
+        console.log("getAddressChiamante() -> " + a);
+      });
+
 			contract.methods.venditaBiglietto(a).send({from: a})
 			.on('receipt', function(){
 				console.log("venditaBiglietto() -> OK");
 
 				contract.methods.getNumeroBiglietti().call()
 				.then((a) => {
-					ticketNumber = a;
 					console.log("getTicketCounter() -> " + a);
+
+          contract.methods.getBiglietto(a - 1).call()
+  				.then((biglietto) => {
+  					v = Object.values(biglietto)
+  					console.log("getBiglietto() -> " + v[0] + " " + v[1] + " " + v[2]);
+  				});
+
 				});
 
 				contract.methods.getPostiDisponibili().call()
@@ -121,14 +127,13 @@ function demo(a){
 					console.log("getPostiDisponibili() -> " + a);
 				});
 
-				contract.methods.getBiglietto(ticketNumber).call()
-				.then((biglietto) => {
-					v = Object.values(biglietto)
-					console.log("getBiglietto() -> " + v[0] + " " + v[1] + " " + v[2]);
-				});
 			});
 		} else {
-			console.log("I biglietti per l'evento selezionato sono esauriti!")
+      contract.methods.getAddressChiamante().call({from: a})
+      .then((a) => {
+        console.log("getAddressChiamante() -> " + a);
+      });
+			console.log("I biglietti per l'evento selezionato sono esauriti!");
 		}
 	});
 
