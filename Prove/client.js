@@ -2,6 +2,9 @@ const Web3 = require("web3");
 
 let web3 = new Web3('http://localhost:22000');
 
+var abi = obj.abi;
+var bytecode = obj.bytecode;
+
 web3.eth.getAccounts().then((value)=> {
   console.log("Accounts: " + value);
   demo(value[0]);
