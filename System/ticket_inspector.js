@@ -1,6 +1,6 @@
 const Web3 = require("web3");
 
-let web3 = new Web3('http://localhost:22001');
+let web3 = new Web3('http://localhost:22003');
 
 const Contract = require("./contract.js");
 const cont = new Contract();
@@ -21,17 +21,19 @@ function sleep(ms){
 function demo(a){
   console.log("used account: " + a);
 
-  var address = "0x064f860b6683223b03b38252853D5d2C210Cce19";
+  var address = "0x938781b9796aeA6376E40ca158f67Fa89D5d8a18";
 
 
   //var Contract = new web3.eth.contract.setProvider()
   var Contract = require('web3-eth-contract');
 
   // set provider for all later instances to use
-  Contract.setProvider('http://localhost:22001');
+  Contract.setProvider('http://localhost:22003');
 
   var contract = new Contract(abi, address);
-  //SCRIVERE
+
+//VECCHI METODI DEL BUYER
+//SCRIVERE
 //  contract.methods.creaEvento(nome, data, numPosti, prezzoBiglietto, luogo).send({from: a})
 //  .on('receipt', function(){
 //      console.log("New event" + nome + "created");
@@ -97,54 +99,45 @@ function demo(a){
   });
 */
 
-	contract.methods.isOnSale().call()
-	.then((result) => {
-		if(result == true){
 
-      contract.methods.getAddressChiamante().call({from: a})
-      .then((addr) => {
-        console.log("getAddressChiamante() -> " + addr);
-      });
+      // contract.methods.getAddressChiamante().call({from: a})
+      // .then((addr) => {
+      //   console.log("getAddressChiamante() -> " + addr);
+      // });
+      //
+      // contract.methods.getAddresses().call()
+      // .then((ruoli) => {
+      //   wallets = Object.values(ruoli);
+      //   console.log("get addresses(): " +
+      //               "\n eventManager -> " + wallets[0] +
+      //               "\n buyer - > " + wallets[1] +
+      //               "\n reseller - > " + wallets[2] +
+      //               "\n validator - > " + wallets[3]);
+      // });
 
-      contract.methods.getAddresses().call()
-      .then((ruoli) => {
-        wallets = Object.values(ruoli);
-        console.log("get addresses(): " +
-                    "\n eventManager -> " + wallets[0] +
-                    "\n buyer - > " + wallets[1] +
-                    "\n reseller - > " + wallets[2] +
-                    "\n validator - > " + wallets[3]);
-      })
+      var idBiglietto= 0;
+      console.log(a);
+      contract.methods.validaBiglietto(idBiglietto).send({from:a})
+      .on('receipt', function(){
+          console.log("Ciao")
+        // contract.methods.isBigliettoVidimato(idBiglietto).call()s
+        // .then((endorsed) => {
+        //   if(endorsed){
+        //     console.log("Brav uagliù");
+        //   } else {
+        //     console.log("meh veffengul");
+        //   }
+        // });
 
-			contract.methods.venditaBiglietto(a).send({from: a})
-			.on('receipt', function(){
-				console.log("venditaBiglietto() -> OK");
+        // contract.methods.getBiglietto(idBiglietto).call()
+        // .then((biglietto) => {
+        //   v = Object.values(biglietto)
+        //   console.log("getBiglietto() -> " + v[0] + " " + v[1] + " " + v[2]);
+        // });
 
-				contract.methods.getNumeroBiglietti().call()
-				.then((a) => {
-					console.log("getTicketCounter() -> " + a);
+     }).catch(()=>{
+       console.log("suca");
+     });
 
-          contract.methods.getBiglietto(a - 1).call()
-  				.then((biglietto) => {
-  					v = Object.values(biglietto)
-  					console.log("getBiglietto() -> " + v[0] + " " + v[1] + " " + v[2]);
-  				});
-
-				});
-
-				contract.methods.getPostiDisponibili().call({from: a})
-				.then((a) => {
-					console.log("getPostiDisponibili() -> " + a);
-				});
-
-			});
-		} else {
-      contract.methods.getAddressChiamante().call({from: a})
-      .then((a) => {
-        console.log("getAddressChiamante() -> " + a);
-      });
-			console.log("I biglietti per l'evento selezionato sono esauriti!");
-		}
-	});
 
 }

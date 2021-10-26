@@ -12,6 +12,7 @@ contract Evento {
         uint256 ticketId;
         bytes32 validateHash;
         bool isValid;
+        bool endorsed;
         address ownerAddress;
     }
 
@@ -20,7 +21,7 @@ contract Evento {
     address reseller;
     address validator;
 
-    enum status {inVendita, sospeso, soldout, cancellato, terminato}
+    enum status {inVendita, inCorso, sospeso, soldout, cancellato, terminato}
 
     string nomeEvento;
     string dataEvento;
@@ -68,6 +69,16 @@ contract Evento {
           return (listaBiglietti[ticketId].validateHash, listaBiglietti[ticketId].isValid, listaBiglietti[ticketId].ownerAddress);
     }
 
+    function isBigliettoVidimato(uint256 ticketId) public view returns (bool){
+      if(listaBiglietti[ticketId].endorsed == true){
+        return true;
+      } else{
+        return false;
+      }
+    }
+
+
+
     /*function send() public payable {
       if(msg.sender == eventManager){
         uint256 tot = prezzoBiglietto*(numPosti - postiDisponibili);
@@ -78,9 +89,12 @@ contract Evento {
       }
     }*/
 
-    function getTicketCounter() public view returns (uint256){
-      if(msg.sender = eventManager){
-        return ticketCounter;
+    function getTicketCounter() public view returns (int256){
+      if(msg.sender == eventManager){
+        return int256(ticketCounter);
+      }
+      else{
+        return -1;
       }
     }
 
@@ -116,67 +130,63 @@ contract Evento {
         return stato;
     }
 
-    function getListaBiglietti() public view returns (Biglietto[]){
-      return listaBiglietti;
-    }
-
     //SETTER
     function setNomeEvento(string memory _newNomeEvento) public {
-      if(msg.sender = eventManager){
+      if(msg.sender == eventManager){
         nomeEvento = _newNomeEvento;
       }
     }
 
-    function setNomeEvento(string memory _newDataEvento) public {
-      if(msg.sender = eventManager){
-        dataEvento = _newDataEvento;
-      }
-    }
-
-    function setNumPosti(string memory _newNumPosti) public {
-      if(msg.sender = eventManager){
+    function setNumPosti(uint256 _newNumPosti) public {
+      if(msg.sender == eventManager){
         numPosti = _newNumPosti;
       }
     }
 
-    function setPostiDisponibili(string memory _newPostiDisponibili) public {
-      if(msg.sender = eventManager){
+    function setPostiDisponibili(uint256 _newPostiDisponibili) public {
+      if(msg.sender == eventManager){
         postiDisponibili = _newPostiDisponibili;
       }
     }
 
-    function setPrezzoBiglietto(string memory _newPrezzoBiglietto) public {
-      if(msg.sender = eventManager){
+    function setPrezzoBiglietto(uint256 _newPrezzoBiglietto) public {
+      if(msg.sender == eventManager){
         prezzoBiglietto = _newPrezzoBiglietto;
       }
     }
 
-    function setLuogo(string memory _newLuogo public {
-      if(msg.sender = eventManager){
-        luogo+ = _newLuogo;
+    function setLuogo(string memory _newLuogo) public {
+      if(msg.sender == eventManager){
+        luogo = _newLuogo;
       }
     }
 
     function setStatoInVendita() public {
-      if(msg.sender = eventManager){
+      if(msg.sender == eventManager){
         stato = status.inVendita;
       }
     }
 
+    function setStatoInCorso() public {
+      if(msg.sender == eventManager){
+        stato = status.inCorso;
+      }
+    }
+
     function setStatoSospeso() public {
-      if(msg.sender = eventManager){
+      if(msg.sender == eventManager){
         stato = status.sospeso;
       }
     }
 
     function setStatoSoldout() public  {
-      if(msg.sender = eventManager){
+      if(msg.sender == eventManager){
         stato = status.soldout;
       }
     }
 
     function setStatoCancellato() public {
-      if(msg.sender = eventManager){
+      if(msg.sender == eventManager){
         stato = status.cancellato;
       }
     }
@@ -192,7 +202,7 @@ contract Evento {
     function venditaBiglietto(address ticketBuyer) public {
       if((postiDisponibili > 0) && (confermaPagamento()) && (stato == status.inVendita)){
         bytes32 sigillo = sigillaBiglietto(ticketCounter, ticketBuyer);
-        listaBiglietti.push(Biglietto(ticketCounter, sigillo, true, ticketBuyer));
+        listaBiglietti.push(Biglietto(ticketCounter, sigillo, true, false, ticketBuyer));
         ticketCounter = ticketCounter + 1;
         postiDisponibili = postiDisponibili - 1;
         if (postiDisponibili == 0){
@@ -209,4 +219,13 @@ contract Evento {
       return keccak256(abi.encodePacked(_ticketCounter, ownerAddress, address(this)));
     }
 
+    function validaBiglietto(uint256 ticketId) public {
+      if(msg.sender == validator){
+        if(listaBiglietti[ticketId].isValid==true && listaBiglietti[ticketId].endorsed == false){
+          listaBiglietti[ticketId].endorsed = true;
+        }else{
+          listaBiglietti[ticketId].endorsed = false;
+        }
+      }
+    }
 }
