@@ -1,6 +1,6 @@
 const Web3 = require("web3");
 
-let web3 = new Web3('http://localhost:22000');
+let web3 = new Web3('http://localhost:22001');
 
 const Contract = require("./contract.js");
 const cont = new Contract();
@@ -21,14 +21,14 @@ function sleep(ms){
 function demo(a){
   console.log("used account: " + a);
 
-  var address = "0xF8BD2aE8D638D61626Fe9820cd2cCc9fe6A81101";
+  var address = "0xA501AfD7d6432718daF4458Cfae8590d88de818E";
 
 
   //var Contract = new web3.eth.contract.setProvider()
   var Contract = require('web3-eth-contract');
 
   // set provider for all later instances to use
-  Contract.setProvider('http://localhost:22000');
+  Contract.setProvider('http://localhost:22001');
 
   var contract = new Contract(abi, address);
   //SCRIVERE
@@ -97,14 +97,24 @@ function demo(a){
   });
 */
 
-	contract.methods.onSale().call()
+	contract.methods.isOnSale().call()
 	.then((result) => {
 		if(result == true){
 
       contract.methods.getAddressChiamante().call({from: a})
-      .then((a) => {
-        console.log("getAddressChiamante() -> " + a);
+      .then((addr) => {
+        console.log("getAddressChiamante() -> " + addr);
       });
+
+      contract.methods.getAddresses().call()
+      .then((ruoli) => {
+        wallets = Object.values(ruoli);
+        console.log("get addresses(): " +
+                    "\n eventManager -> " + wallets[0] +
+                    "\n buyer - > " + wallets[1] +
+                    "\n reseller - > " + wallets[2] +
+                    "\n validator - > " + wallets[3]);
+      })
 
 			contract.methods.venditaBiglietto(a).send({from: a})
 			.on('receipt', function(){
@@ -122,7 +132,7 @@ function demo(a){
 
 				});
 
-				contract.methods.getPostiDisponibili().call()
+				contract.methods.getPostiDisponibili().call({from: a})
 				.then((a) => {
 					console.log("getPostiDisponibili() -> " + a);
 				});

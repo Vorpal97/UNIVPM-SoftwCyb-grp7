@@ -81,6 +81,20 @@ function demo(a){
       console.log("contract mined: " + address);
       console.log(receipt);
 
+      const smartContract = {
+        address: address
+      };
+
+      const fs = require('fs');
+      const smartContractJson = JSON.stringify(smartContract)
+      fs.writeFile('./contracts.json', smartContractJson + "\n", { flag: 'a+' }, err => {
+        if(err){
+          console.log('Errore durante la scrittura del JSON', err)
+        } else {
+          console.log('JSON scritto con successo')
+        }
+      });
+
       //var Contract = new web3.eth.contract.setProvider()
       var Contract = require('web3-eth-contract');
 
