@@ -21,7 +21,7 @@ function sleep(ms){
 function demo(a){
   console.log("used account: " + a);
 
-  var address = "0xA501AfD7d6432718daF4458Cfae8590d88de818E";
+  var address = "0x2A4aA27B00AcB48287c2F3f7567C71550F8d945d";
 
 
   //var Contract = new web3.eth.contract.setProvider()
@@ -120,7 +120,7 @@ function demo(a){
 			.on('receipt', function(){
 				console.log("venditaBiglietto() -> OK");
 
-				contract.methods.getNumeroBiglietti().call()
+				contract.methods.getTicketCounter().call()
 				.then((a) => {
 					console.log("getTicketCounter() -> " + a);
 
