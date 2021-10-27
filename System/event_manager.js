@@ -115,7 +115,7 @@ function demo(a){
                     "\n validator - > " + address_list[2]);
       });
 
-      contract.methods.creaEvento(nome, data, numPosti, prezzoBiglietto, luogo, ticketCounter).send({from: a})
+      contract.methods.creaEvento(nome, data, numPosti, prezzoBiglietto, luogo).send({from: a})
       .on('receipt', function(){
           console.log("New event " + nome + " created");
       });
