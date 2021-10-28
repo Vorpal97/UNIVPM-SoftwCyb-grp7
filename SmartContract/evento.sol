@@ -16,7 +16,7 @@ contract Evento {
         address ownerAddress;
     }
 
-    address payable eventManager;
+    address eventManager;
     address buyer;
     address reseller;
     address validator;
@@ -64,13 +64,32 @@ contract Evento {
       return (eventManager, buyer, reseller, validator);
     }
 
+    function getEventManager() public view returns (address) {
+      return eventManager;
+    }
 
-    function getBiglietto(uint256 ticketId) public view returns (bytes32, bool, address){
-          return (listaBiglietti[ticketId].validateHash, listaBiglietti[ticketId].isValid, listaBiglietti[ticketId].ownerAddress);
+    function getBuyer() public view returns (address) {
+      return buyer;
+    }
+
+    function getReseller() public view returns (address) {
+      return reseller;
+    }
+
+    function getValidator() public view returns (address) {
+      return validator;
+    }
+
+    function getBiglietto(uint256 ticketId) public view returns (bool, uint256, bytes32, bool, bool, address){
+      if(ticketId < ticketCounter){
+          return (true, listaBiglietti[ticketId].ticketId, listaBiglietti[ticketId].validateHash, listaBiglietti[ticketId].isValid, listaBiglietti[ticketId].endorsed, listaBiglietti[ticketId].ownerAddress);
+      }else{
+        return (false, 0, 0, false, false,address(0));
+      }
     }
 
     function isBigliettoVidimato(uint256 ticketId) public view returns (bool){
-      if(listaBiglietti[ticketId].endorsed == true){
+      if(ticketId < ticketCounter && listaBiglietti[ticketId].endorsed == true){
         return true;
       } else{
         return false;
@@ -214,12 +233,10 @@ contract Evento {
       return keccak256(abi.encodePacked(_ticketCounter, ownerAddress, address(this)));
     }
 
-    function validaBiglietto(uint256 ticketId) public {
-      if(msg.sender == validator){
+    function vidimaBiglietto(uint256 ticketId) public {
+      if(msg.sender == validator && ticketId < ticketCounter){
         if(listaBiglietti[ticketId].isValid==true && listaBiglietti[ticketId].endorsed == false){
           listaBiglietti[ticketId].endorsed = true;
-        }else{
-          listaBiglietti[ticketId].endorsed = false;
         }
       }
     }

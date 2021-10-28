@@ -1,6 +1,8 @@
 const Web3 = require("web3");
 
-let web3 = new Web3('http://localhost:22000');
+let nodo = 'http://localhost:22000';
+
+let web3 = new Web3(nodo);
 
 const Contract = require("./contract.js");
 const cont = new Contract();
@@ -99,7 +101,7 @@ function demo(a){
       var Contract = require('web3-eth-contract');
 
       // set provider for all later instances to use
-      Contract.setProvider('http://localhost:22000');
+      Contract.setProvider(nodo);
 
       var contract = new Contract(abi, address);
 
