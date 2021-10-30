@@ -1,20 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet"href="css/main.css">
+<link rel="stylesheet"href="http://localhost:8080/style">
 </head>
 <body>
+  <script>
+      fetch("http://localhost:8080/address")
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (myJson) {
+          document.querySelector("#address").innerHTML = myJson.address;
+        })
+        .catch(function (error) {
+          console.log("Error: " + error);
+        });
+    </script>
 
 <ul>
-  <li><a class="index.html" href="index.html">Home</a></li>
-  <li><a href="">Crea Evento</a></li>
-  <li><a href="">Modifica Eventi</a></li>
-  <li><a href="">Visualizza Eventi</a></li>
+  <li><a class="active" href="http://localhost:8080/">Home</a></li>
+  <li><a href="http://localhost:8080/creaevento">Crea Evento</a></li>
+  <li><a href="http://localhost:8080/modificaeventi">Modifica Eventi</a></li>
+  <li><a href="http://localhost:8080/visualizzaeventi">Visualizza Eventi</a></li>
 </ul>
 
-<div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
-  <h1>Event Manager</h1>
-
+<div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px">
+  <h1 style="display:inline-block">You are logged as Event Manager:</h1>
+  <h2 id=address style="display:inline-block"></h2>
 </div>
 
 </body>
