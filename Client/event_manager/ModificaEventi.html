@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
 <link rel="stylesheet"href="http://localhost:8080/style">
@@ -8,12 +7,26 @@
 <ul>
   <li><a href="http://localhost:8080/">Home</a></li>
   <li><a href="http://localhost:8080/creaevento">Crea Evento</a></li>
-  <li><a class="active" href="http://localhost:8080/modificaeventi">Modifica Eventi</a></li>
   <li><a href="http://localhost:8080/visualizzaeventi">Visualizza Eventi</a></li>
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
-  <h1>Modifica Eventi</h1>
+  <h1>Modifica Evento</h1>
+
+  <form action="http://127.0.0.1:8080/nuovoevento" method="post">
+    <label for="fname">Nome dell'evento:</label><br>
+    <input type="text" id="fname" name="eventName"><br>
+    <label for="fname">Data dell'evento:</label><br>
+    <input type="text" id="fname" name="eventDate"><br>
+    <label for="fname">Luogo dell'evento:</label><br>
+    <input type="text" id="fname" name="eventPlace"><br>
+    <label for="fname">Numero posti:</label><br>
+    <input type="text" id="fname" name="eventNPosti"><br>
+    <label for="fname">Prezzo del biglietto:</label><br>
+    <input type="text" id="fname" name="eventPrice"><br>
+    <input type="submit" value="Modifica evento">
+  </form>
+
 
 </div>
 

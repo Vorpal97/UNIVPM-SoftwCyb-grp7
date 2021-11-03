@@ -4,16 +4,60 @@
 <link rel="stylesheet"href="http://localhost:8080/style">
 </head>
 <body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+      fetch("http://localhost:8080/eventi")
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (myJson) {
+          const tabellaEventi = document.querySelector("#eventi");
+          $(document).ready(function () {
+                var json = myJson;
+                var tr;
+                for (var i = 0; i < json.length; i++) {
+                    tr = $('<tr/>');
+                    tr.append("<td>" + json[i].nome + "</td>");
+                    tr.append("<td>" + json[i].data + "</td>");
+                    tr.append("<td>" + json[i].numPosti + "</td>");
+                    tr.append("<td>" + json[i].prezzoBiglietto + "</td>");
+                    tr.append("<td>" + json[i].ticketCounter + "</td>");
+                    tr.append("<td>" + json[i].address + "</td>");
+                    tr.append("<td>" + json[i].luogo + "</td>");
+                    tr.append("<td><a href='http://localhost:8080/modificaevento?address=" + json[i].address +
+                              "'>Modifica<a/>" +
+                              "</td>");
+                    $('table').append(tr);
+                }
+        });
+
+        })
+        .catch(function (error) {
+          console.log("Error: " + error);
+        });
+    </script>
 
 <ul>
   <li><a href="http://localhost:8080/">Home</a></li>
   <li><a href="http://localhost:8080/creaevento">Crea Evento</a></li>
-  <li><a href="http://localhost:8080/modificaeventi">Modifica Eventi</a></li>
   <li><a class="active" href="http://localhost:8080/visualizzaeventi">Visualizza Eventi</a></li>
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
   <h1>Visualizza Eventi</h1>
+
+  <table>
+    <tr>
+      <th>Nome dell'Evento</th>
+      <th>Data</th>
+      <th>Numero posti</th>
+      <th>Prezzo biglietto</th>
+      <th>Biglietti venduti</th>
+      <th>Indirizzo</th>
+      <th>Luogo</th>
+      <th>Opzioni</th>
+    </tr>
+  </table>
 
 
 </div>

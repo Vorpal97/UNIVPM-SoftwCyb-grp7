@@ -21,6 +21,8 @@ const cont = new Contract();
 var abi = cont.abi;
 var bytecode = cont.bytecode;
 
+var listaEventi = [];
+
 var address_list_tmp = [];
 fs = require('fs')
 fs.readFile('accounts.txt', 'utf8', function (err,data) {
@@ -50,17 +52,72 @@ function popList(list, pattern){
   return tmp;
 }
 
-const promisify = (inner) =>
-    new Promise((resolve, reject) =>
-         inner((err, res) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(res);
-            }
-        })
-    );
+async function getEventData(address){
 
+  var Contract = require('web3-eth-contract');
+  Contract.setProvider(nodo);
+  var contract = new Contract(abi, address);
+  tmp = {};
+
+  await contract.methods.getLuogo().call()
+    .then((result) => {
+      tmp.luogo = result;
+    })
+
+  await contract.methods.getNomeEvento().call()
+  .then((result) => {
+    tmp.nome = result;
+  });
+
+  await contract.methods.getDataEvento().call()
+  .then((result) => {
+    tmp.data = result;
+  });
+
+  await contract.methods.getNumPosti().call()
+  .then((result) => {
+    tmp.numPosti = result;
+  });
+
+  await contract.methods.getPrezzoBiglietto().call()
+  .then((result) => {
+    tmp.prezzoBiglietto = result;
+  });
+
+  await contract.methods.getStato().call()
+  .then((result) => {
+    switch(result){
+      case 0:
+        tmp.stato = "inVendita";
+        break;
+      case 1:
+        tmp.stato = "inCorso";
+        break;
+      case 2:
+        tmp.stato = "sospeso";
+        break;
+      case 3:
+        tmp.stato = "soldout";
+        break;
+      case 4:
+        tmp.stato = "cancellato";
+        break;
+      case 5:
+        tmp.stato="terminato";
+        break;
+      default:
+      tmp.stato="errore";
+        break;
+    }
+  });
+
+  await contract.methods.getTicketCounter().call()
+  .then((result) => {
+    tmp.ticketCounter = result;
+  });
+
+  return JSON.stringify(tmp);
+}
 
 function main(a){
   app.get('/', (req, res) => {
@@ -81,8 +138,21 @@ function main(a){
     res.sendFile(path.resolve('../Client/event_manager/CreaEvento.html'));
   });
 
-  app.get('/modificaeventi', (req, res) => {
-    res.sendFile(path.resolve('../Client/event_manager/ModificaEventi.html'));
+  app.get('/modificaevento', async (req, res) => {
+
+    var address = req.query.address;
+
+    var evento = await getEventData(address);
+
+    evento = JSON.parse(evento);
+
+    var form = `<form action='http://127.0.0.1:8080/nuovoevento' method='post'>  <label for='fname'>Nome dell'evento:</label><br>  <input type='text' id='fname' value=${evento.nome} name='eventName'><br>  <label for='fname'>Data dell'evento:</label><br>  <input type='text' id='fname' value=${evento.data} name='eventDate'><br>  <label for='fname'>Luogo dell'evento:</label><br>  <input type='text' id='fname' value=${evento.luogo} name='eventPlace'><br>  <label for='fname'>Numero posti:</label><br>  <input type='text' id='fname' value=${evento.numPosti} name='eventNPosti'><br>  <label for='fname'>Prezzo del biglietto:</label><br>  <input type='text' id='fname' value=${evento.prezzoBiglietto} name='eventPrice'><br>  <p>Stato:</p>    <input type='radio' id='html' name='stato' value='inVendita'>    <label for='inVendita'>In vendita</label><br>    <input type='radio' id='css' name='stato' value='inCorso'>    <label for='inCorso'>In corso</label><br>    <input type='radio' id='javascript' name='stato' value='sospeso'>    <label for='sospeso'>Sospeso</label><br>    <input type='radio' id='javascript' name='stato' value='soldout'>    <label for='soldout'>Sold out</label><br>    <input type='radio' id='javascript' name='stato' value='cancellato'>    <label for='cancellato'>Cancellato</label><br>    <input type='radio' id='javascript' name='stato' value='terminato'>    <label for='terminato'>Terminato</label><br>    <input type='submit' value='Modifica evento'>    <input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';" /> </form>`;
+    var html = "<html>\n<head>\n<link rel='stylesheet'href='http://localhost:8080/style'>\n</head>\n<body>\n\n<ul>\n  <li><a href='http://localhost:8080/'>Home</a></li>\n  <li><a href='http://localhost:8080/creaevento'>Crea Evento</a></li>\n  <li><a href='http://localhost:8080/visualizzaeventi'>Visualizza Eventi</a></li>\n</ul>\n\n<div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>\n  <h1>Modifica Evento</h1>\n" +
+               form +
+               "</div>\n\n</body>\n</html>\n"
+
+   res.setHeader('Content-Type', 'text/html');
+   res.end(html);
   });
 
   app.get('/visualizzaeventi', (req, res) => {
@@ -96,12 +166,12 @@ function main(a){
     var prezzoBiglietto = req.body.eventPrice;
     var luogo = req.body.eventPlace;
 
-    // console.log ("Nuovo evento creato: \n" +
-    //               "nome: " + nome + "\n" +
-    //               "data: " + data + "\n" +
-    //               "numPosti: " + numPosti + "\n" +
-    //               "prezzoBiglietto:" + prezzoBiglietto + "\n" +
-    //               "luogo: " + luogo + "\n")
+     console.log ("Nuovo evento creato: \n" +
+                   "nome: " + nome + "\n" +
+                   "data: " + data + "\n" +
+                   "numPosti: " + numPosti + "\n" +
+                   "prezzoBiglietto:" + prezzoBiglietto + "\n" +
+                   "luogo: " + luogo + "\n")
 
     console.log("used account: " + a);
 
@@ -177,8 +247,7 @@ function main(a){
         });
 
       }
-
-  res.sendFile(path.resolve('../Client/event_manager/VisualizzaEventi.html'));
+  res.redirect("/visualizzaeventi");
 
   });
 
@@ -186,42 +255,25 @@ function main(a){
     res.sendFile(path.resolve('contracts.json'));
   });
 
-  app.get('/eventi', (req, res) => {
-
-      var address = "0x1932c48b2bF8102Ba33B4A6B545C32236e342f34";
-
-      var Contract = require('web3-eth-contract');
-      Contract.setProvider(nodo);
-      var contract = new Contract(abi, address);
-      tmp = {};
-      contract.methods.getNomeEvento().call()
-      .then((result1) => {
-        contract.methods.getDataEvento().call()
-        .then((result2) => {
-          contract.methods.getNumPosti().call()
-          .then((result3) => {
-            contract.methods.getPrezzoBiglietto().call()
-            .then((result4) => {
-              contract.methods.getLuogo().call()
-              .then((result5) => {
-                contract.methods.getTicketCounter().call()
-                .then((result6) => {
-                  tmp.nome = result1;
-                  tmp.data = result2;
-                  tmp.numPosti = result3;
-                  tmp.prezzoBiglietto = result4;
-                  tmp.luogo = result5;
-                  tmp.ticketCounter = result6;
-                  res.setHeader('Content-Type', 'application/json');
-                  res.end(JSON.stringify(tmp));
-                });
-              });
-            });
-          });
-        });
-      });
+  app.get('/eventi', async(req, res) => {
+      var listaEventi = [];
+      fs = require('fs');
+      var data = fs.readFileSync('contracts.json', 'utf8');
+      listaEventi = data.split("\n")
+      var o = [];
+      for(i = 0; i < listaEventi.length - 1; i++){
+        var address = JSON.parse(listaEventi[i]).address
+        var a = {};
+        await getEventData(address).then((result) => {
+            a = result;
+        })
+        a = JSON.parse(a)
+        a.address = address;
+        o.push(a);
+      }
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify(o));
   });
-
 
   app.listen(8080, function() {
     console.log('Event Manager è accessibile a http://127.0.0.1:8080/');
