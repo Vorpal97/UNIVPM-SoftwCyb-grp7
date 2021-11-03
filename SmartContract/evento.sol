@@ -205,6 +205,13 @@ contract Evento {
       }
     }
 
+    function setStatoTerminato() public {
+      if(msg.sender == eventManager){
+        stato = status.terminato;
+      }
+    }
+
+
     //SERVICES
     function isOnSale() public view returns (bool){
         if(stato == status.inVendita)
