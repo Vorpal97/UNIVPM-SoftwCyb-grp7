@@ -1,4 +1,5 @@
 <form action='http://127.0.0.1:8080/aggiornaevento' method='post'>
+  <input type="hidden" value=${address} name="address">
   <label for='fname'>Nome dell'evento:</label><br>
   <input type='text' id='fname' value=${evento.nome} name='eventName'><br>
   <label for='fname'>Data dell'evento:</label><br>
@@ -7,8 +8,6 @@
   <input type='text' id='fname' value=${evento.luogo} name='eventPlace'><br>
   <label for='fname'>Numero posti:</label><br>
   <input type='text' id='fname' value=${evento.numPosti} name='eventNPosti'><br>
-  <label for='fname'>Prezzo del biglietto:</label><br>
-  <input type='text' id='fname' value=${evento.prezzoBiglietto} name='eventPrice'><br>
   <p>Stato:</p>
     <input type='radio' id='html' name='stato' value='inVendita'>
     <label for='inVendita'>In vendita</label><br>

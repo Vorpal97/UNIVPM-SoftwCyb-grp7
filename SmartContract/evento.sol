@@ -157,9 +157,9 @@ contract Evento {
       }
     }
 
-    function setPostiDisponibili(uint256 _newPostiDisponibili) public {
+    function setData(string memory _dataEvento) public {
       if(msg.sender == eventManager){
-        postiDisponibili = _newPostiDisponibili;
+        dataEvento = _dataEvento;
       }
     }
 

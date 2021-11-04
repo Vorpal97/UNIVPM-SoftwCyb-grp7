@@ -146,7 +146,7 @@ function main(a){
 
     evento = JSON.parse(evento);
 
-    var form = `<form action='http://127.0.0.1:8080/aggiornaevento' method='post'>  <label for='fname'>Nome dell'evento:</label><br>  <input type='text' id='fname' value=${evento.nome} name='eventName'><br>  <label for='fname'>Data dell'evento:</label><br>  <input type='text' id='fname' value=${evento.data} name='eventDate'><br>  <label for='fname'>Luogo dell'evento:</label><br>  <input type='text' id='fname' value=${evento.luogo} name='eventPlace'><br>  <label for='fname'>Numero posti:</label><br>  <input type='text' id='fname' value=${evento.numPosti} name='eventNPosti'><br>  <label for='fname'>Prezzo del biglietto:</label><br>  <input type='text' id='fname' value=${evento.prezzoBiglietto} name='eventPrice'><br>  <p>Stato:</p>    <input type='radio' id='html' name='stato' value='inVendita'>    <label for='inVendita'>In vendita</label><br>    <input type='radio' id='css' name='stato' value='inCorso'>    <label for='inCorso'>In corso</label><br>    <input type='radio' id='javascript' name='stato' value='sospeso'>    <label for='sospeso'>Sospeso</label><br>    <input type='radio' id='javascript' name='stato' value='soldout'>    <label for='soldout'>Sold out</label><br>    <input type='radio' id='javascript' name='stato' value='cancellato'>    <label for='cancellato'>Cancellato</label><br>    <input type='radio' id='javascript' name='stato' value='terminato'>    <label for='terminato'>Terminato</label><br>    <input type='submit' value='Modifica evento'>    <input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';" /></form>`;
+    var form = `<form action='http://127.0.0.1:8080/aggiornaevento' method='post'>  <input type="hidden" value=${address} name="address">  <label for='fname'>Nome dell'evento:</label><br>  <input type='text' id='fname' value=${evento.nome} name='eventName'><br>  <label for='fname'>Data dell'evento:</label><br>  <input type='text' id='fname' value=${evento.data} name='eventDate'><br>  <label for='fname'>Luogo dell'evento:</label><br>  <input type='text' id='fname' value=${evento.luogo} name='eventPlace'><br>  <label for='fname'>Numero posti:</label><br>  <input type='text' id='fname' value=${evento.numPosti} name='eventNPosti'><br>  <p>Stato:</p>    <input type='radio' id='html' name='stato' value='inVendita'>    <label for='inVendita'>In vendita</label><br>    <input type='radio' id='css' name='stato' value='inCorso'>    <label for='inCorso'>In corso</label><br>    <input type='radio' id='javascript' name='stato' value='sospeso'>    <label for='sospeso'>Sospeso</label><br>    <input type='radio' id='javascript' name='stato' value='soldout'>    <label for='soldout'>Sold out</label><br>    <input type='radio' id='javascript' name='stato' value='cancellato'>    <label for='cancellato'>Cancellato</label><br>    <input type='radio' id='javascript' name='stato' value='terminato'>    <label for='terminato'>Terminato</label><br>    <input type='submit' value='Modifica evento'>    <input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';" /></form>`;
     var html = "<html>\n<head>\n<link rel='stylesheet'href='http://localhost:8080/style'>\n</head>\n<body>\n\n<ul>\n  <li><a href='http://localhost:8080/'>Home</a></li>\n  <li><a href='http://localhost:8080/creaevento'>Crea Evento</a></li>\n  <li><a href='http://localhost:8080/visualizzaeventi'>Visualizza Eventi</a></li>\n</ul>\n\n<div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>\n  <h1>Modifica Evento</h1>\n" +
                form +
                "</div>\n\n</body>\n</html>\n"
@@ -156,14 +156,83 @@ function main(a){
   });
 
   app.post("/aggiornaevento", (req, res) => {
+
     var nome = req.body.eventName;
     var data = req.body.eventDate;
     var numPosti = req.body.eventNPosti;
-    var prezzoBiglietto = req.body.eventPrice;
     var luogo = req.body.eventPlace;
     var stato = req.body.stato;
+    var address = req.body.address;
 
-    console.log(stato)
+    var Contract = require('web3-eth-contract');
+    Contract.setProvider(nodo);
+    var contract = new Contract(abi, address);
+
+    contract.methods.setNomeEvento(nome).send({from: a})
+    .on('receipt', function(){
+        console.log("Nome evento aggiornato a " + nome);
+    });
+
+    //INSERIRE CONTROLLO CHE IMPEDISCE DI SETTARE numPosti < ticketCounter
+
+    contract.methods.setNumPosti(numPosti).send({from: a})
+    .on('receipt', function(){
+        console.log("Numero posti evento aggiornato a " + numPosti);
+    });
+
+    contract.methods.setData(data).send({from: a})
+    .on('receipt', function(){
+        console.log("Data evento aggiornato a " + data);
+    });
+
+    contract.methods.setLuogo(luogo).send({from: a})
+    .on('receipt', function(){
+        console.log("Luogo evento aggiornato a " + luogo);
+    });
+
+    var statoNum = -1;
+
+    switch (stato) {
+      case "inVendita":
+        contract.methods.setStatoInVendita().send({from: a})
+        .on('receipt', function(){
+            console.log("Stato evento aggiornato " + nome + " created");
+        });
+        break;
+      case "inCorso":
+        contract.methods.setStatoInCorso().send({from: a})
+        .on('receipt', function(){
+            console.log("Stato evento aggiornato " + nome + " created");
+        });
+        break;
+      case "sospeso":
+        contract.methods.setStatoSospeso().send({from: a})
+        .on('receipt', function(){
+            console.log("Stato evento aggiornato " + nome + " created");
+        });
+        break;
+      case "soldout":
+        contract.methods.setStatoSoldout().send({from: a})
+        .on('receipt', function(){
+            console.log("Stato evento aggiornato " + nome + " created");
+        });
+        break;
+      case "cancellato":
+        contract.methods.setStatoCancellato().send({from: a})
+        .on('receipt', function(){
+            console.log("Stato evento aggiornato " + nome + " created");
+        });
+        break;
+      case "terminato":
+        contract.methods.setStatoTerminato().send({from: a})
+        .on('receipt', function(){
+            console.log("Stato evento aggiornato " + nome + " created");
+        });
+        break;
+      default:
+      // ERRORE
+  }
+  res.redirect("/visualizzaeventi")
   })
 
   app.get('/visualizzaeventi', (req, res) => {
