@@ -4,21 +4,6 @@
 <link rel="stylesheet"href="http://localhost:8080/style">
 </head>
 <body>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script>
-  $('#creaevento').on('submit', function(e){
-    e.preventDefault();
-    $.ajax({
-       type: "POST",
-       url: "http://127.0.0.1:8080/nuovoevento",
-       data: $(this).serialize(),
-       success: function() {
-         alert('success');
-       }
-    });
-});
-  </script>
-
 <ul>
   <li><a href="http://localhost:8080/">Home</a></li>
   <li><a class="active" href="http://localhost:8080/creaevento">Crea Evento</a></li>
@@ -28,7 +13,7 @@
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
   <h1>Crea Evento</h1>
 
-  <form id="creaevento">
+  <form action="http://127.0.0.1:8080/nuovoevento" method="post">
     <label for="fname">Nome dell'evento:</label><br>
     <input type="text" id="fname" name="eventName"><br>
     <label for="fname">Data dell'evento:</label><br>
@@ -39,9 +24,8 @@
     <input type="text" id="fname" name="eventNPosti"><br>
     <label for="fname">Prezzo del biglietto:</label><br>
     <input type="text" id="fname" name="eventPrice"><br>
-    <input type="submit" value="Crea evento">
+    <input type="submit" value="Crea evento" id="btnSubmit"/>
   </form>
-
 
 </div>
 

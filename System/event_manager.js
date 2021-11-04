@@ -146,7 +146,7 @@ function main(a){
 
     evento = JSON.parse(evento);
 
-    var form = `<form action='http://127.0.0.1:8080/nuovoevento' method='post'>  <label for='fname'>Nome dell'evento:</label><br>  <input type='text' id='fname' value=${evento.nome} name='eventName'><br>  <label for='fname'>Data dell'evento:</label><br>  <input type='text' id='fname' value=${evento.data} name='eventDate'><br>  <label for='fname'>Luogo dell'evento:</label><br>  <input type='text' id='fname' value=${evento.luogo} name='eventPlace'><br>  <label for='fname'>Numero posti:</label><br>  <input type='text' id='fname' value=${evento.numPosti} name='eventNPosti'><br>  <label for='fname'>Prezzo del biglietto:</label><br>  <input type='text' id='fname' value=${evento.prezzoBiglietto} name='eventPrice'><br>  <p>Stato:</p>    <input type='radio' id='html' name='stato' value='inVendita'>    <label for='inVendita'>In vendita</label><br>    <input type='radio' id='css' name='stato' value='inCorso'>    <label for='inCorso'>In corso</label><br>    <input type='radio' id='javascript' name='stato' value='sospeso'>    <label for='sospeso'>Sospeso</label><br>    <input type='radio' id='javascript' name='stato' value='soldout'>    <label for='soldout'>Sold out</label><br>    <input type='radio' id='javascript' name='stato' value='cancellato'>    <label for='cancellato'>Cancellato</label><br>    <input type='radio' id='javascript' name='stato' value='terminato'>    <label for='terminato'>Terminato</label><br>    <input type='submit' value='Modifica evento'>    <input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';" /> </form>`;
+    var form = `<form action='http://127.0.0.1:8080/aggiornaevento' method='post'>  <label for='fname'>Nome dell'evento:</label><br>  <input type='text' id='fname' value=${evento.nome} name='eventName'><br>  <label for='fname'>Data dell'evento:</label><br>  <input type='text' id='fname' value=${evento.data} name='eventDate'><br>  <label for='fname'>Luogo dell'evento:</label><br>  <input type='text' id='fname' value=${evento.luogo} name='eventPlace'><br>  <label for='fname'>Numero posti:</label><br>  <input type='text' id='fname' value=${evento.numPosti} name='eventNPosti'><br>  <label for='fname'>Prezzo del biglietto:</label><br>  <input type='text' id='fname' value=${evento.prezzoBiglietto} name='eventPrice'><br>  <p>Stato:</p>    <input type='radio' id='html' name='stato' value='inVendita'>    <label for='inVendita'>In vendita</label><br>    <input type='radio' id='css' name='stato' value='inCorso'>    <label for='inCorso'>In corso</label><br>    <input type='radio' id='javascript' name='stato' value='sospeso'>    <label for='sospeso'>Sospeso</label><br>    <input type='radio' id='javascript' name='stato' value='soldout'>    <label for='soldout'>Sold out</label><br>    <input type='radio' id='javascript' name='stato' value='cancellato'>    <label for='cancellato'>Cancellato</label><br>    <input type='radio' id='javascript' name='stato' value='terminato'>    <label for='terminato'>Terminato</label><br>    <input type='submit' value='Modifica evento'>    <input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';" /></form>`;
     var html = "<html>\n<head>\n<link rel='stylesheet'href='http://localhost:8080/style'>\n</head>\n<body>\n\n<ul>\n  <li><a href='http://localhost:8080/'>Home</a></li>\n  <li><a href='http://localhost:8080/creaevento'>Crea Evento</a></li>\n  <li><a href='http://localhost:8080/visualizzaeventi'>Visualizza Eventi</a></li>\n</ul>\n\n<div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>\n  <h1>Modifica Evento</h1>\n" +
                form +
                "</div>\n\n</body>\n</html>\n"
@@ -154,6 +154,17 @@ function main(a){
    res.setHeader('Content-Type', 'text/html');
    res.end(html);
   });
+
+  app.post("/aggiornaevento", (req, res) => {
+    var nome = req.body.eventName;
+    var data = req.body.eventDate;
+    var numPosti = req.body.eventNPosti;
+    var prezzoBiglietto = req.body.eventPrice;
+    var luogo = req.body.eventPlace;
+    var stato = req.body.stato;
+
+    console.log(stato)
+  })
 
   app.get('/visualizzaeventi', (req, res) => {
     res.sendFile(path.resolve('../Client/event_manager/VisualizzaEventi.html'));
@@ -247,8 +258,7 @@ function main(a){
         });
 
       }
-      res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({status:"success"}));
+      res.redirect("/")
   });
 
   app.get('/ottienieventi', (req, res) => {

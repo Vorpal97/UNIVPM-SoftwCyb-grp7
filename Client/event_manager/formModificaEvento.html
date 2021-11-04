@@ -1,4 +1,4 @@
-<form action='http://127.0.0.1:8080/nuovoevento' method='post'>
+<form action='http://127.0.0.1:8080/aggiornaevento' method='post'>
   <label for='fname'>Nome dell'evento:</label><br>
   <input type='text' id='fname' value=${evento.nome} name='eventName'><br>
   <label for='fname'>Data dell'evento:</label><br>
@@ -23,5 +23,5 @@
     <input type='radio' id='javascript' name='stato' value='terminato'>
     <label for='terminato'>Terminato</label><br>
     <input type='submit' value='Modifica evento'>
-    <input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';" /> 
+    <input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';" />
 </form>
