@@ -87,22 +87,22 @@ async function getEventData(address){
   await contract.methods.getStato().call()
   .then((result) => {
     switch(result){
-      case 0:
+      case '0':
         tmp.stato = "inVendita";
         break;
-      case 1:
+      case '1':
         tmp.stato = "inCorso";
         break;
-      case 2:
+      case '2':
         tmp.stato = "sospeso";
         break;
-      case 3:
+      case '3':
         tmp.stato = "soldout";
         break;
-      case 4:
+      case '4':
         tmp.stato = "cancellato";
         break;
-      case 5:
+      case '5':
         tmp.stato="terminato";
         break;
       default:
@@ -202,7 +202,7 @@ function main(a){
       }
     }
 
-      function receipt_handler(receipt){
+      async function receipt_handler(receipt){
         address = receipt.contractAddress
         console.log("contract mined: " + address);
         console.log(receipt);
@@ -231,7 +231,7 @@ function main(a){
 
         //SCRIVERE
 
-        contract.methods.setup(a, address_list[0], address_list[1], address_list[2]).send({from: a})
+        await contract.methods.setup(a, address_list[0], address_list[1], address_list[2]).send({from: a})
         .on('receipt', function(){
 
           console.log("Address impostati: \n" +
@@ -241,14 +241,14 @@ function main(a){
                       "\n validator - > " + address_list[2]);
         });
 
-        contract.methods.creaEvento(nome, data, numPosti, prezzoBiglietto, luogo).send({from: a})
+        await contract.methods.creaEvento(nome, data, numPosti, prezzoBiglietto, luogo).send({from: a})
         .on('receipt', function(){
             console.log("New event " + nome + " created");
         });
 
       }
-  res.redirect("/visualizzaeventi");
-
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({status:"success"}));
   });
 
   app.get('/ottienieventi', (req, res) => {
