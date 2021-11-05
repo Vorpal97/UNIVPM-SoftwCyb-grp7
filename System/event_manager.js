@@ -8,6 +8,7 @@ const path = require('path');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json())
 
 
 
@@ -142,26 +143,39 @@ function main(a){
 
     var address = req.query.address;
 
+    if(address == null)
+      res.end("");
+
+    var address = req.query.address;
+
     var evento = await getEventData(address);
 
     evento = JSON.parse(evento);
 
-    var form = `<form action='http://127.0.0.1:8080/aggiornaevento' method='post'>  <input type="hidden" value=${address} name="address">  <label for='fname'>Nome dell'evento:</label><br>  <input type='text' id='fname' value=${evento.nome} name='eventName'><br>  <label for='fname'>Data dell'evento:</label><br>  <input type='text' id='fname' value=${evento.data} name='eventDate'><br>  <label for='fname'>Luogo dell'evento:</label><br>  <input type='text' id='fname' value=${evento.luogo} name='eventPlace'><br>  <label for='fname'>Numero posti:</label><br>  <input type='text' id='fname' value=${evento.numPosti} name='eventNPosti'><br>  <p>Stato:</p>    <input type='radio' id='html' name='stato' value='inVendita'>    <label for='inVendita'>In vendita</label><br>    <input type='radio' id='css' name='stato' value='inCorso'>    <label for='inCorso'>In corso</label><br>    <input type='radio' id='javascript' name='stato' value='sospeso'>    <label for='sospeso'>Sospeso</label><br>    <input type='radio' id='javascript' name='stato' value='soldout'>    <label for='soldout'>Sold out</label><br>    <input type='radio' id='javascript' name='stato' value='cancellato'>    <label for='cancellato'>Cancellato</label><br>    <input type='radio' id='javascript' name='stato' value='terminato'>    <label for='terminato'>Terminato</label><br>    <input type='submit' value='Modifica evento'>    <input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';" /></form>`;
-    var html = "<html>\n<head>\n<link rel='stylesheet'href='http://localhost:8080/style'>\n</head>\n<body>\n\n<ul>\n  <li><a href='http://localhost:8080/'>Home</a></li>\n  <li><a href='http://localhost:8080/creaevento'>Crea Evento</a></li>\n  <li><a href='http://localhost:8080/visualizzaeventi'>Visualizza Eventi</a></li>\n</ul>\n\n<div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>\n  <h1>Modifica Evento</h1>\n" +
-               form +
-               "</div>\n\n</body>\n</html>\n"
+    // var form = `<form action='http://127.0.0.1:8080/aggiornaevento' method='post'>    <input type="hidden" value=${address} id="address">    <label for='fname'>Nome dell'evento:</label><br>    <input type='text' value=${evento.nome} id='eventName'><br>    <label for='fname'>Data dell'evento:</label><br>    <input type='text' value=${evento.data} id='eventDate'><br>    <label for='fname'>Luogo dell'evento:</label><br>    <input type='text' value=${evento.luogo} id='eventPlace'><br>    <label for='fname'>Numero posti:</label><br>    <input type='text' value=${evento.numPosti} id='eventNPosti'><br>    <p>Stato:</p>    <input type='radio' id='stato' value='inVendita'>    <label for='inVendita'>In vendita</label><br>    <input type='radio' id='stato' value='inCorso'>    <label for='inCorso'>In corso</label><br>    <input type='radio' id='stato' value='sospeso'>    <label for='sospeso'>Sospeso</label><br>    <input type='radio' id='stato' value='soldout'>    <label for='soldout'>Sold out</label><br>    <input type='radio' id='stato' value='cancellato'>    <label for='cancellato'>Cancellato</label><br>    <input type='radio' id='stato' value='terminato'>    <label for='terminato'>Terminato</label><br>    <button onclick="inviaDati()" value="Modifica evento">    <!--<input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';" />-->  </form>`;
+    // var html = "<html><head><link rel='stylesheet'href='http://localhost:8080/style'><script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script></head><body>  <script>    function inviaDati(){        obj = {          eventName : document.getElementById('eventName').innerHTML;          eventDate : document.getElementById('eventDate').innerHTML;          eventPlace : document.getElementById('eventPlace').innerHTML;          eventNPosti : document.getElementById('eventNPosti').innerHTML;          eventPrice : document.getElementById('eventPrice').innerHTML;        } console.log(obj);       $.ajax({           type: 'POST',           url: 'http://localhost:8080/aggiornaevento',           data: obj.serialize(),           success: function() {             alert('success');           }        });    });  </script><ul>  <li><a href='http://localhost:8080/'>Home</a></li>  <li><a href='http://localhost:8080/creaevento'>Crea Evento</a></li>  <li><a href='http://localhost:8080/visualizzaeventi'>Visualizza Eventi</a></li></ul><div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>  <h1>Modifica Evento</h1>" +
+    //            form +
+    //            "</div>\n\n</body>\n</html>\n"
+
+    fs = require('fs');
+    var data = fs.readFileSync('../Client/event_manager/ModificaEventi.html', 'utf8');
+    data = data.replace("${address}", address);
+    data = data.replace("${evento.nome}", evento.nome);
+    data = data.replace("${evento.data}", evento.data);
+    data = data.replace("${evento.luogo}", evento.luogo);
+    data = data.replace("${evento.numPosti}", evento.numPosti);
+    data = data.replace("${evento.stato}", evento.stato);
 
    res.setHeader('Content-Type', 'text/html');
-   res.end(html);
+   res.end(data);
   });
 
   app.post("/aggiornaevento", (req, res) => {
-
     var nome = req.body.eventName;
     var data = req.body.eventDate;
     var numPosti = req.body.eventNPosti;
     var luogo = req.body.eventPlace;
-    var stato = req.body.stato;
+    var stato = req.body.eventStatus;
     var address = req.body.address;
 
     var Contract = require('web3-eth-contract');
@@ -191,6 +205,8 @@ function main(a){
     });
 
     var statoNum = -1;
+
+    console.log("stato da settare a " + stato)
 
     switch (stato) {
       case "inVendita":
@@ -232,7 +248,9 @@ function main(a){
       default:
       // ERRORE
   }
-  res.redirect("/visualizzaeventi")
+  // res.setHeader('Content-Type', 'application/json');
+   res.end("");
+
   })
 
   app.get('/visualizzaeventi', (req, res) => {

@@ -4,6 +4,35 @@
 <link rel="stylesheet"href="http://localhost:8080/style">
 </head>
 <body>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+  <script>
+    function annulla(){
+      window.location.href='http://localhost:8080/visualizzaeventi';
+    }
+
+    function inviaDati(){
+      obj = {
+        eventName : document.getElementById("eventName").value,
+        eventDate : document.getElementById("eventDate").value,
+        eventPlace : document.getElementById("eventPlace").value,
+        eventNPosti : document.getElementById("eventNPosti").value,
+        eventPrice : document.getElementById("eventPrice").value
+        //eventStatus : $("input[type='radio'][name='stato']:checked").val()
+      }
+      console.log(obj)
+      $.ajax({
+         type: "POST",
+         url: "http://localhost:8080/nuovoevento",
+         data: obj,
+         success: function() {
+           alert("Evento modificato correttamente!");
+           window.location.href='http://localhost:8080/visualizzaeventi';
+         }
+      });
+
+    }
+  </script>
+
 <ul>
   <li><a href="http://localhost:8080/">Home</a></li>
   <li><a class="active" href="http://localhost:8080/creaevento">Crea Evento</a></li>
@@ -13,19 +42,35 @@
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
   <h1>Crea Evento</h1>
 
-  <form action="http://127.0.0.1:8080/nuovoevento" method="post">
-    <label for="fname">Nome dell'evento:</label><br>
-    <input type="text" id="fname" name="eventName"><br>
-    <label for="fname">Data dell'evento:</label><br>
-    <input type="text" id="fname" name="eventDate"><br>
-    <label for="fname">Luogo dell'evento:</label><br>
-    <input type="text" id="fname" name="eventPlace"><br>
-    <label for="fname">Numero posti:</label><br>
-    <input type="text" id="fname" name="eventNPosti"><br>
-    <label for="fname">Prezzo del biglietto:</label><br>
-    <input type="text" id="fname" name="eventPrice"><br>
-    <input type="submit" value="Crea evento" id="btnSubmit"/>
-  </form>
+  <form>
+      <label>Nome dell'evento:</label><br>
+      <input type='text' id='eventName'><br>
+      <label>Data dell'evento:</label><br>
+      <input type='text' id='eventDate'><br>
+      <label>Luogo dell'evento:</label><br>
+      <input type='text' id='eventPlace'><br>
+      <label>Numero posti:</label><br>
+      <input type='text' id='eventNPosti'><br>
+      <label>Numero posti:</label><br>
+      <input type='text' id='eventPrice'><br>
+<!--
+      <p>Stato:</p>
+      <input type='radio' id="radioinVendita" name='stato' value='inVendita' checked = "checked">
+      <label for='inVendita'>In vendita</label><br>
+      <input type='radio' id="radioinCorso" name='stato' value='inCorso'>
+      <label for='inCorso'>In corso</label><br>
+      <input type='radio' id="radiosospeso" name='stato' value='sospeso'>
+      <label for='sospeso'>Sospeso</label><br>
+      <input type='radio' id="radiosoldout" name='stato' value='soldout'>
+      <label for='soldout'>Sold out</label><br>
+      <input type='radio' id="radiocancellato" name='stato' value='cancellato'>
+      <label for='cancellato'>Cancellato</label><br>
+      <input type='radio' id="radioterminato" name='stato' value='terminato'>
+      <label for='terminato'>Terminato</label><br>
+-->
+    </form>
+    <button onclick="inviaDati()"> Crea evento </button>
+    <button onclick="annulla()"> Annulla </button>
 
 </div>
 
