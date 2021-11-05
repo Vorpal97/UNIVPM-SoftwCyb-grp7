@@ -11,6 +11,7 @@
     }
 
     function inviaDati(){
+
       obj = {
         eventName : document.getElementById("eventName").value,
         eventDate : document.getElementById("eventDate").value,
@@ -19,17 +20,22 @@
         eventPrice : document.getElementById("eventPrice").value
         //eventStatus : $("input[type='radio'][name='stato']:checked").val()
       }
-      console.log(obj)
-      $.ajax({
-         type: "POST",
-         url: "http://localhost:8080/nuovoevento",
-         data: obj,
-         success: function() {
-           alert("Evento modificato correttamente!");
-           window.location.href='http://localhost:8080/visualizzaeventi';
-         }
-      });
 
+      if(obj.eventName == "" || obj.eventDate == "" || obj.eventPlace == "" || obj.eventNPosti == "" || obj.eventPrice == ""){
+        document.getElementById("outputBox").innerHTML = "Controlla che tutti i campi siano valorizzati"
+      } else {
+        document.getElementById("outputBox").innerHTML = ""
+        console.log(obj)
+        $.ajax({
+           type: "POST",
+           url: "http://localhost:8080/nuovoevento",
+           data: obj,
+           success: function() {
+             alert("Evento modificato correttamente!");
+             window.location.href='http://localhost:8080/visualizzaeventi';
+           }
+        });
+      }
     }
   </script>
 
@@ -40,19 +46,21 @@
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
+  <div class="formDati">
   <h1>Crea Evento</h1>
 
-  <form>
+  <form id="input">
       <label>Nome dell'evento:</label><br>
-      <input type='text' id='eventName'><br>
+      <input type='text' id='eventName' required><br>
       <label>Data dell'evento:</label><br>
-      <input type='text' id='eventDate'><br>
+      <input type='date' id='eventDate' required pattern="\d{4}-\d{2}-\d{2}"><br>
       <label>Luogo dell'evento:</label><br>
-      <input type='text' id='eventPlace'><br>
+      <input type='text' id='eventPlace' required><br>
       <label>Numero posti:</label><br>
-      <input type='text' id='eventNPosti'><br>
+      <input type='text' id='eventNPosti' required><br>
       <label>Numero posti:</label><br>
-      <input type='text' id='eventPrice'><br>
+      <input type='text' id='eventPrice' required><br>
+      <p style ="color:red" id="outputBox"></p>
 <!--
       <p>Stato:</p>
       <input type='radio' id="radioinVendita" name='stato' value='inVendita' checked = "checked">
@@ -69,9 +77,9 @@
       <label for='terminato'>Terminato</label><br>
 -->
     </form>
-    <button onclick="inviaDati()"> Crea evento </button>
-    <button onclick="annulla()"> Annulla </button>
-
+    <button class="bottone" onclick="inviaDati()"> Crea evento </button>
+    <button class="bottone" style="background-color:#ff5252" onclick="annulla()"> Annulla </button>
+</div>
 </div>
 
 </body>

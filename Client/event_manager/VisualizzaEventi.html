@@ -26,7 +26,7 @@
                     tr.append("<td>" + json[i].luogo + "</td>");
                     tr.append("<td>" + json[i].stato + "</td>");
                     tr.append("<td><a href='http://localhost:8080/modificaevento?address=" + json[i].address +
-                              "'>Modifica<a/>" +
+                              "'><img src='https://pic.onlinewebfonts.com/svg/img_354025.png' height='25px'width='25px'><a/>" +
                               "</td>");
                     $('table').append(tr);
                 }
@@ -45,9 +45,11 @@
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
+  <div class="formDati">
+
   <h1>Visualizza Eventi</h1>
 
-  <table>
+  <table id="eventi">
     <tr>
       <th>Nome dell'Evento</th>
       <th>Data</th>
@@ -61,7 +63,7 @@
     </tr>
   </table>
 
-
+</div>
 </div>
 
 </body>
