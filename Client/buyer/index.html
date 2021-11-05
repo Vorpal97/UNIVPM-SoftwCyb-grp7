@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet"href="css/main.css">
+<link rel="stylesheet"href="http://localhost:8080/style">
 </head>
 <body>
-
+  <script>
+      fetch("http://localhost:8080/address")
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (myJson) {
+          document.querySelector("#address").innerHTML = myJson.address;
+        })
+        .catch(function (error) {
+          console.log("Error: " + error);
+        });
+    </script>
 <ul>
-  <li><a class="active" href="index.html">Home</a></li>
-  <li><a href="EventManager.html">Visualizza eventi disponibili</a></li>
-  <li><a href="Buyer.html">I miei biglietti</a></li>
+  <li><a class="active" href="http://localhost:8080/">Home</a></li>
+  <li><a href="http://localhost:8080/visualizzaeventi">Visualizza eventi disponibili</a></li>
+  <li><a href="http://localhost:8080/visualizzabiglietti">I miei biglietti</a></li>
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
-  <h1>Buyer</h1>
+  <h1 style="display:inline-block">You are logged as Buyer:</h1>
+  <h2 id=address style="display:inline-block"></h2>
 
 </div>
 
