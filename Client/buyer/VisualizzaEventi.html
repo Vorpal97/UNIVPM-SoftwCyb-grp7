@@ -26,9 +26,9 @@
                     tr.append("<td>" + json[i].address + "</td>");
                     tr.append("<td>" + json[i].luogo + "</td>");
                     tr.append("<td>" + json[i].stato + "</td>");
-                    tr.append("<td><a href='http://localhost:8080/acquistabiglietto?address=" + json[i].address +
-                              "'>Acquista<a/>" +
+                    tr.append("<td><button class=\"bottone\" onClick = \"window.location.href='http://localhost:8080/acquistabiglietto?address=" + json[i].address + "'\">Compra</button>" +
                               "</td>");
+
                     $('table').append(tr);
                 }
         });
@@ -46,9 +46,11 @@
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
+  <div class="riquadro">
+
   <h1>Visualizza eventi</h1>
 
-  <table>
+  <table id="eventi">
     <tr>
       <th>Nome dell'Evento</th>
       <th>Data</th>
@@ -63,6 +65,7 @@
     </tr>
   </table>
 
+</div>
 </div>
 
 </body>

@@ -24,17 +24,21 @@
       if(obj.eventName == "" || obj.eventDate == "" || obj.eventPlace == "" || obj.eventNPosti == "" || obj.eventPrice == ""){
         document.getElementById("outputBox").innerHTML = "Controlla che tutti i campi siano valorizzati"
       } else {
-        document.getElementById("outputBox").innerHTML = ""
-        console.log(obj)
-        $.ajax({
-           type: "POST",
-           url: "http://localhost:8080/nuovoevento",
-           data: obj,
-           success: function() {
-             alert("Evento modificato correttamente!");
-             window.location.href='http://localhost:8080/visualizzaeventi';
-           }
-        });
+        if(/^\d+$/.test(obj.eventNPosti) && /^\d+$/.test(obj.eventPrice)){
+          document.getElementById("outputBox").innerHTML = ""
+          console.log(obj)
+          $.ajax({
+             type: "POST",
+             url: "http://localhost:8080/nuovoevento",
+             data: obj,
+             success: function() {
+               alert("Evento modificato correttamente!");
+               window.location.href='http://localhost:8080/visualizzaeventi';
+             }
+          });
+        } else {
+          document.getElementById("outputBox").innerHTML = "Controlla che il prezzo del biglietto e il numero dei posti siano valori numerici"
+        }
       }
     }
   </script>
@@ -46,40 +50,42 @@
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
-  <div class="formDati">
-  <h1>Crea Evento</h1>
+  <div class="center">
+    <div class="riquadro riquadroDati">
+      <h1>Crea Evento</h1>
 
-  <form id="input">
-      <label>Nome dell'evento:</label><br>
-      <input type='text' id='eventName' required><br>
-      <label>Data dell'evento:</label><br>
-      <input type='date' id='eventDate' required pattern="\d{4}-\d{2}-\d{2}"><br>
-      <label>Luogo dell'evento:</label><br>
-      <input type='text' id='eventPlace' required><br>
-      <label>Numero posti:</label><br>
-      <input type='text' id='eventNPosti' required><br>
-      <label>Numero posti:</label><br>
-      <input type='text' id='eventPrice' required><br>
-      <p style ="color:red" id="outputBox"></p>
-<!--
-      <p>Stato:</p>
-      <input type='radio' id="radioinVendita" name='stato' value='inVendita' checked = "checked">
-      <label for='inVendita'>In vendita</label><br>
-      <input type='radio' id="radioinCorso" name='stato' value='inCorso'>
-      <label for='inCorso'>In corso</label><br>
-      <input type='radio' id="radiosospeso" name='stato' value='sospeso'>
-      <label for='sospeso'>Sospeso</label><br>
-      <input type='radio' id="radiosoldout" name='stato' value='soldout'>
-      <label for='soldout'>Sold out</label><br>
-      <input type='radio' id="radiocancellato" name='stato' value='cancellato'>
-      <label for='cancellato'>Cancellato</label><br>
-      <input type='radio' id="radioterminato" name='stato' value='terminato'>
-      <label for='terminato'>Terminato</label><br>
--->
-    </form>
-    <button class="bottone" onclick="inviaDati()"> Crea evento </button>
-    <button class="bottone" style="background-color:#ff5252" onclick="annulla()"> Annulla </button>
-</div>
+      <form id="input" autocomplete="off">
+          <label>Nome dell'evento:</label><br>
+          <input type='text' id='eventName' required><br>
+          <label>Data dell'evento:</label><br>
+          <input type='date' id='eventDate' required pattern="\d{4}-\d{2}-\d{2}"><br>
+          <label>Luogo dell'evento:</label><br>
+          <input type='text' id='eventPlace' required><br>
+          <label>Numero posti:</label><br>
+          <input type='text' id='eventNPosti' required><br>
+          <label>Prezzo biglietto:</label><br>
+          <input type='text' id='eventPrice' required><br>
+          <p style ="color:red" id="outputBox"></p>
+    <!--
+          <p>Stato:</p>
+          <input type='radio' id="radioinVendita" name='stato' value='inVendita' checked = "checked">
+          <label for='inVendita'>In vendita</label><br>
+          <input type='radio' id="radioinCorso" name='stato' value='inCorso'>
+          <label for='inCorso'>In corso</label><br>
+          <input type='radio' id="radiosospeso" name='stato' value='sospeso'>
+          <label for='sospeso'>Sospeso</label><br>
+          <input type='radio' id="radiosoldout" name='stato' value='soldout'>
+          <label for='soldout'>Sold out</label><br>
+          <input type='radio' id="radiocancellato" name='stato' value='cancellato'>
+          <label for='cancellato'>Cancellato</label><br>
+          <input type='radio' id="radioterminato" name='stato' value='terminato'>
+          <label for='terminato'>Terminato</label><br>
+    -->
+        </form>
+      <button class="bottone" onclick="inviaDati()"> Crea evento </button>
+      <button class="bottoneCanc" onclick="annulla()"> Annulla </button>
+    </div>
+  </div>
 </div>
 
 </body>

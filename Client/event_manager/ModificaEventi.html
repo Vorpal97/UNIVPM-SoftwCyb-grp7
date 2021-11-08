@@ -23,22 +23,25 @@
         eventNPosti : document.getElementById("eventNPosti").value,
         eventStatus : $("input[type='radio'][name='stato']:checked").val()
       }
-      if(obj.eventName == "" || obj.eventDate == "" || obj.eventPlace == "" || obj.eventNPosti == "" || obj.eventPrice == ""){
+      if(obj.eventName == "" || obj.eventDate == "" || obj.eventPlace == "" || obj.eventNPosti == ""){
         document.getElementById("outputBox").innerHTML = "Controlla che tutti i campi siano valorizzati"
       } else {
-        document.getElementById("outputBox").innerHTML = ""
-        console.log(obj)
-        $.ajax({
-           type: "POST",
-           url: "http://localhost:8080/aggiornaevento",
-           data: obj,
-           success: function() {
-             alert("Evento modificato correttamente!");
-             window.location.href='http://localhost:8080/visualizzaeventi';
-           }
-        });
-    }
-
+        if(/^\d+$/.test(obj.eventNPosti)){
+          document.getElementById("outputBox").innerHTML = ""
+          console.log(obj)
+          $.ajax({
+             type: "POST",
+             url: "http://localhost:8080/aggiornaevento",
+             data: obj,
+             success: function() {
+               alert("Evento modificato correttamente!");
+               window.location.href='http://localhost:8080/visualizzaeventi';
+             }
+          });
+        } else {
+          document.getElementById("outputBox").innerHTML = "Controlla che il numero dei posti sia un valore numerico"
+        }
+      }
     }
   </script>
 
@@ -49,40 +52,42 @@
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
-  <div class="formDati">
-  <h1>Modifica Evento</h1>
+  <div class="center">
+    <div class="riquadro riquadroDati">
+    <h1>Modifica Evento</h1>
 
-  <form>
-      <input type='hidden' value='${address}' id="address">
-      <input type='hidden' value='${evento.stato}' id="stato">
-      <label for='fname'>Nome dell'evento:</label><br>
-      <input type='text' value='${evento.nome}' id='eventName' required><br>
-      <label for='fname'>Data dell'evento:</label><br>
-      <input type='date' value='${evento.data}' id='eventDate' required pattern="\d{4}-\d{2}-\d{2}"><br>
-      <label for='fname'>Luogo dell'evento:</label><br>
-      <input type='text' value='${evento.luogo}' id='eventPlace' required><br>
-      <label for='fname'>Numero posti:</label><br>
-      <input type='text' value='${evento.numPosti}' id='eventNPosti' required><br>
-      <p style ="color:red" id="outputBox"></p>
+    <form autocomplete="off">
+        <input type='hidden' value='${address}' id="address">
+        <input type='hidden' value='${evento.stato}' id="stato">
+        <label for='fname'>Nome dell'evento:</label><br>
+        <input type='text' value='${evento.nome}' id='eventName' required><br>
+        <label for='fname'>Data dell'evento:</label><br>
+        <input type='date' value='${evento.data}' id='eventDate' required pattern="\d{4}-\d{2}-\d{2}"><br>
+        <label for='fname'>Luogo dell'evento:</label><br>
+        <input type='text' value='${evento.luogo}' id='eventPlace' required><br>
+        <label for='fname'>Numero posti:</label><br>
+        <input type='text' value='${evento.numPosti}' id='eventNPosti' required><br>
+        <p style ="color:red" id="outputBox"></p>
 
-      <p>Stato:</p>
-      <input type='radio' id = "radioinVendita" name='stato' value='inVendita'>
-      <label for='inVendita'>In vendita</label><br>
-      <input type='radio' id = "radioinCorso" name='stato' value='inCorso'>
-      <label for='inCorso'>In corso</label><br>
-      <input type='radio' id = "radiosospeso" name='stato' value='sospeso'>
-      <label for='sospeso'>Sospeso</label><br>
-      <input type='radio' id = "radiosoldout" name='stato' value='soldout'>
-      <label for='soldout'>Sold out</label><br>
-      <input type='radio' id = "radiocancellato" name='stato' value='cancellato'>
-      <label for='cancellato'>Cancellato</label><br>
-      <input type='radio' id = "radioterminato" name='stato' value='terminato'>
-      <label for='terminato'>Terminato</label><br>
-      <!--<input type="submit" value="Modifica Evento">-->
-    </form>
-    <button class="bottone" onclick="inviaDati()"> Modifica evento </button>
-    <button class="bottone" style="background-color:#ff5252" onclick="annulla()"> Annulla </button>
-</div>
+        <p>Stato:</p>
+        <input type='radio' id = "radioinVendita" name='stato' value='inVendita'>
+        <label for='inVendita'>In vendita</label><br>
+        <input type='radio' id = "radioinCorso" name='stato' value='inCorso'>
+        <label for='inCorso'>In corso</label><br>
+        <input type='radio' id = "radiosospeso" name='stato' value='sospeso'>
+        <label for='sospeso'>Sospeso</label><br>
+        <input type='radio' id = "radiosoldout" name='stato' value='soldout'>
+        <label for='soldout'>Sold out</label><br>
+        <input type='radio' id = "radiocancellato" name='stato' value='cancellato'>
+        <label for='cancellato'>Cancellato</label><br>
+        <input type='radio' id = "radioterminato" name='stato' value='terminato'>
+        <label for='terminato'>Terminato</label><br>
+        <!--<input type="submit" value="Modifica Evento">-->
+      </form>
+      <button class="bottone" onclick="inviaDati()"> Modifica evento </button>
+      <button class="bottoneCanc" onclick="annulla()"> Annulla </button>
+    </div>
+  </div>
 
 </div>
 

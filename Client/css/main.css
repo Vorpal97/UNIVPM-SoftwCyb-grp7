@@ -76,15 +76,37 @@ input[type=date], select {
   background-color: #388e3c;
 }
 
-.formDati {
+.bottoneCanc {
+  width: 100%;
+  background-color:#FF5252;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.bottoneCanc:hover {
+  background-color: #F44336;
+}
+
+.riquadro {
   margin-top: 50px;
   border-radius: 5px;
-  background-color: #f4f4f4;
+  background-color: #f2f2f2;
   padding: 20px;
 }
 
-#eventi {
+.riquadroDati{
+  width: 40em
+}
+
+* {
   font-family: Arial, Helvetica, sans-serif;
+}
+
+#eventi {
   border-collapse: collapse;
   width: 100%;
 }
@@ -101,7 +123,20 @@ input[type=date], select {
 #eventi th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
   background-color: #04AA6D;
   color: white;
+}
+
+.center {
+  display: grid;
+  justify-content: center;
+}
+
+.row {
+  margin: 0 auto;
+}
+
+.column {
+  display: inline;
+  width: 200px; !important
 }

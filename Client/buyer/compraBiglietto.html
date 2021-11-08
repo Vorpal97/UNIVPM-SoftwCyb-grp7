@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <link rel='stylesheet'href='http://localhost:8080/style'>
+  </head>
+  <script type="text/javascript">
+    function acquista(){
+      window.location.href='http://localhost:8080/acquista?address=' + document.getElementById("address").value
+    }
+
+    function annulla(){
+      window.location.href='http://localhost:8080/visualizzaeventi';
+    }
+  </script>
+
+  <body>
+
+    <ul>
+      <li><a href='http://localhost:8080/'>Home</a></li>
+      <li><a href='http://localhost:8080/visualizzaeventi'>Visualizza eventi disponibili</a></li>
+      <li><a href='http://localhost:8080/visualizzabiglietti'>I miei biglietti</a></li>
+    </ul>
+
+    <div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>
+      <div class="center">
+        <div class="riquadro" style="width: fit-Content;">
+          <h2>Acquista 1 biglietto per quest'evento</h2><br>
+          <table id="eventi">
+            <input type="hidden" value="${address}" id="address">
+            <tr><td> Nome evento</td><td>${evento.nome}</td></tr>
+            <tr><td>Data dell'evento</td><td>${evento.data} </td></tr>
+            <tr><td>Luogo dell'evento</td><td>${evento.luogo} </td></tr>
+            <tr><td>Numero posti</td><td>${evento.numPosti}</td></tr>
+            <tr><td> Posti disponibli</td><td>${evento.postiDisponibili} </td></tr>
+            <tr><td>Prezzo</td><td>${evento.prezzoBiglietto} euro</td></tr>
+          </table>
+          <div style="margin-top: 20px">
+            <button class="bottone" onClick="acquista()"> Conferma </button>
+            <button class="bottoneCanc" onClick="annulla()"/> Annulla </button>
+          </div>
+        </div>
+        <div>
+    </div>
+  </body>
+</html>

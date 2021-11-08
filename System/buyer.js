@@ -149,18 +149,30 @@ function main(a){
   app.get('/acquistabiglietto', async (req, res) => {
 
     var address = req.query.address;
+    if(address == null)
+      res.end("");
 
     var evento = await getEventData(address);
 
     evento = JSON.parse(evento);
 
-    var data = `<h2>Acquista 1 biglietto per quest'evento</h2><br><input type="hidden" value=${address} name="address"> <h4> Nome evento: ${evento.nome} </h4><h4>Data dell'evento: ${evento.data} </h4><h4>Luogo dell'evento: ${evento.luogo} </h4><h4>Numero posti: ${evento.numPosti}</h4><h4> Posti disponibli:${evento.postiDisponibili} </h4><h4>Prezzo: ${evento.prezzoBiglietto} euro</h4><input type='button' value='Conferma' onClick="window.location.href='http://localhost:8080/acquista?address=${address}'"> <input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';"/>`;
-    var html = "<html>\n<head>\n<link rel='stylesheet'href='http://localhost:8080/style'>\n</head>\n<body>\n\n<ul>\n  <li><a href='http://localhost:8080/'>Home</a></li>\n  <li><a href='http://localhost:8080/visualizzaeventi'>Visualizza eventi disponibili</a></li>\n  <li><a href='http://localhost:8080/visualizzabiglietti'>I miei biglietti</a></li>\n</ul>\n\n<div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>\n " +
-               data +
-               "</div>\n\n</body>\n</html>\n"
+    // var data = `<h2>Acquista 1 biglietto per quest'evento</h2><br><input type="hidden" value=${address} name="address"> <h4> Nome evento: ${evento.nome} </h4><h4>Data dell'evento: ${evento.data} </h4><h4>Luogo dell'evento: ${evento.luogo} </h4><h4>Numero posti: ${evento.numPosti}</h4><h4> Posti disponibli:${evento.postiDisponibili} </h4><h4>Prezzo: ${evento.prezzoBiglietto} euro</h4><input type='button' value='Conferma' onClick="window.location.href='http://localhost:8080/acquista?address=${address}'"> <input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';"/>`;
+    // var html = "<html>\n<head>\n<link rel='stylesheet'href='http://localhost:8080/style'>\n</head>\n<body>\n\n<ul>\n  <li><a href='http://localhost:8080/'>Home</a></li>\n  <li><a href='http://localhost:8080/visualizzaeventi'>Visualizza eventi disponibili</a></li>\n  <li><a href='http://localhost:8080/visualizzabiglietti'>I miei biglietti</a></li>\n</ul>\n\n<div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>\n " +
+    //            data +
+    //            "</div>\n\n</body>\n</html>\n"
+
+    fs = require('fs');
+    var data = fs.readFileSync('../Client/buyer/compraBiglietto.html', 'utf8');
+    data = data.replace("${address}", address);
+    data = data.replace("${evento.nome}", evento.nome);
+    data = data.replace("${evento.data}", evento.data);
+    data = data.replace("${evento.luogo}", evento.luogo);
+    data = data.replace("${evento.numPosti}", evento.numPosti);
+    data = data.replace("${evento.postiDisponibili}", evento.postiDisponibili);
+    data = data.replace("${evento.prezzoBiglietto}", evento.prezzoBiglietto);
 
    res.setHeader('Content-Type', 'text/html');
-   res.end(html);
+   res.end(data);
   });
 
   app.listen(8080, function() {
@@ -169,6 +181,8 @@ function main(a){
 
   app.get("/acquista", (req, res) => {
     address = req.query.address;
+    console.log(address)
+
     var Contract = require('web3-eth-contract');
     Contract.setProvider(nodo);
     var contract = new Contract(abi, address);
