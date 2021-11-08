@@ -88,6 +88,16 @@ contract Evento {
       }
     }
 
+    function getBigliettoByAddress() public view returns (uint256[] memory) {
+      uint256[] memory tickets;
+      for (uint256 i=0; i < ticketCounter; i++){
+        if (listaBiglietti[i].ownerAddress == msg.sender){
+          tickets[i] = i;
+        }
+      }
+      return tickets;
+    }
+
     function isBigliettoVidimato(uint256 ticketId) public view returns (bool){
       if(ticketId < ticketCounter && listaBiglietti[ticketId].endorsed == true){
         return true;
