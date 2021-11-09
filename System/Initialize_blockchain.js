@@ -5,19 +5,6 @@ async function main(){
 
   const fs = require('fs');
 
-  // delete a file
-  // fs.unlink('accounts.txt', (err) => {
-  //     if (err) {
-  //       console.log("creo file");
-  //     }
-  // });
-  //
-  // fs.unlink('contracts.json', (err) => {
-  //     if (err) {
-  //       console.log("inizializzo i contratti");
-  //     }
-  // });
-
   fs.writeFileSync("accounts.txt","");
   fs.writeFileSync("contracts.json","");
 
@@ -33,12 +20,7 @@ async function main(){
       flag: "a+",
       mode: 0o666
     });
-      // fs.writeFile('accounts.txt', value[0] + "\n", { flag: 'w' }, err => {
-      //   if (err) {
-      //     console.error(err)
-      //     return
-      //   }
-      // });
+
     }).catch(() => {
       console.log("Si è verificato un errore!")
     });

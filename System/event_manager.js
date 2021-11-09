@@ -123,7 +123,6 @@ async function getEventData(address){
 function main(a){
   app.get('/', (req, res) => {
       res.sendFile(path.resolve('../Client/event_manager/index.html'));
-      //res.sendFile('../Client/event_manager/index.html', { root: __dirname });
   });
 
   app.get('/style', (req, res) => {
@@ -151,11 +150,6 @@ function main(a){
     var evento = await getEventData(address);
 
     evento = JSON.parse(evento);
-
-    // var form = `<form action='http://127.0.0.1:8080/aggiornaevento' method='post'>    <input type="hidden" value=${address} id="address">    <label for='fname'>Nome dell'evento:</label><br>    <input type='text' value=${evento.nome} id='eventName'><br>    <label for='fname'>Data dell'evento:</label><br>    <input type='text' value=${evento.data} id='eventDate'><br>    <label for='fname'>Luogo dell'evento:</label><br>    <input type='text' value=${evento.luogo} id='eventPlace'><br>    <label for='fname'>Numero posti:</label><br>    <input type='text' value=${evento.numPosti} id='eventNPosti'><br>    <p>Stato:</p>    <input type='radio' id='stato' value='inVendita'>    <label for='inVendita'>In vendita</label><br>    <input type='radio' id='stato' value='inCorso'>    <label for='inCorso'>In corso</label><br>    <input type='radio' id='stato' value='sospeso'>    <label for='sospeso'>Sospeso</label><br>    <input type='radio' id='stato' value='soldout'>    <label for='soldout'>Sold out</label><br>    <input type='radio' id='stato' value='cancellato'>    <label for='cancellato'>Cancellato</label><br>    <input type='radio' id='stato' value='terminato'>    <label for='terminato'>Terminato</label><br>    <button onclick="inviaDati()" value="Modifica evento">    <!--<input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';" />-->  </form>`;
-    // var html = "<html><head><link rel='stylesheet'href='http://localhost:8080/style'><script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script></head><body>  <script>    function inviaDati(){        obj = {          eventName : document.getElementById('eventName').innerHTML;          eventDate : document.getElementById('eventDate').innerHTML;          eventPlace : document.getElementById('eventPlace').innerHTML;          eventNPosti : document.getElementById('eventNPosti').innerHTML;          eventPrice : document.getElementById('eventPrice').innerHTML;        } console.log(obj);       $.ajax({           type: 'POST',           url: 'http://localhost:8080/aggiornaevento',           data: obj.serialize(),           success: function() {             alert('success');           }        });    });  </script><ul>  <li><a href='http://localhost:8080/'>Home</a></li>  <li><a href='http://localhost:8080/creaevento'>Crea Evento</a></li>  <li><a href='http://localhost:8080/visualizzaeventi'>Visualizza Eventi</a></li></ul><div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>  <h1>Modifica Evento</h1>" +
-    //            form +
-    //            "</div>\n\n</body>\n</html>\n"
 
     fs = require('fs');
     var data = fs.readFileSync('../Client/event_manager/ModificaEventi.html', 'utf8');
