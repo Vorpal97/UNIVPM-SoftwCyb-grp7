@@ -194,8 +194,60 @@ function main(a){
     });
   }
 
-  app.get('/mytickets', (req, res) => {
-    
+  app.get('/mytickets', async(req, res) => {
+      var Contract = require('web3-eth-contract');
+      Contract.setProvider(nodo);
+      const fs = require('fs');
+      var data = fs.readFileSync('contracts.json', 'utf8');
+      address = data.split("\n");
+      console.log(address);
+      var a = [];
+      for(var i=0; i < address.length -1 ; i++){
+        var add = JSON.parse(address[i]).address;
+        console.log("dioc->" + add);
+        var contract = new Contract(abi, add);
+        console.log("CAZZO");
+        console.log("###->" + JSON.parse(address[i]).address);
+        var listaBiglietti = [];
+        await contract.methods.getBigliettoByAddress().call({from: a})
+            .then((result) => {
+              listaBiglietti = result.split(";");
+              listaBiglietti.pop();
+            }).catch(()=>{
+              console.log("errore sulla getBigliettoByAddress")
+            });
+
+            for(var i = 0; i < listaBiglietti.length; i++){
+              var o = {};
+              await contract.methods.getBiglietto(i).call()
+                .then((result) => {
+                  obj = Object.values(result);
+                  o.okOp = obj[0];
+                  o.id = obj[1];
+                  o.hash = obj[2];
+                  o.isValid = obj[3];
+                  o.isEndorsed = obj[4];
+                  o.owner = obj[5];
+              }).catch(()=>{
+                console.log("errore sulla getBiglietto")
+              });
+              a.push(o)
+            }
+          console.log("Oggetto o--->" + o);
+      }
+      console.log("#############-->" + a);
+      // for(i = 0; i < listaEventi.length - 1; i++){
+      //   var address = JSON.parse(listaEventi[i]).address
+      //   var a = {};
+      //   await getEventData(address).then((result) => {
+      //       a = result;
+      //   })
+      //   a = JSON.parse(a)
+      //   a.address = address;
+      //   o.push(a);
+      // }
+      res.setHeader('Content-Type', 'application/json');
+      res.end("");
   });
 
 
