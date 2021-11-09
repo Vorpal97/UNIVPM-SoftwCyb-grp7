@@ -106,7 +106,6 @@ function main(a){
 
   app.get('/', (req, res) => {
       res.sendFile(path.resolve('../Client/buyer/index.html'));
-      //res.sendFile('../Client/event_manager/index.html', { root: __dirname });
   });
 
   app.get('/style', (req, res) => {
@@ -156,11 +155,6 @@ function main(a){
 
     evento = JSON.parse(evento);
 
-    // var data = `<h2>Acquista 1 biglietto per quest'evento</h2><br><input type="hidden" value=${address} name="address"> <h4> Nome evento: ${evento.nome} </h4><h4>Data dell'evento: ${evento.data} </h4><h4>Luogo dell'evento: ${evento.luogo} </h4><h4>Numero posti: ${evento.numPosti}</h4><h4> Posti disponibli:${evento.postiDisponibili} </h4><h4>Prezzo: ${evento.prezzoBiglietto} euro</h4><input type='button' value='Conferma' onClick="window.location.href='http://localhost:8080/acquista?address=${address}'"> <input type="button" name="cancel" value="Annulla" onClick="window.location.href='http://localhost:8080/visualizzaeventi';"/>`;
-    // var html = "<html>\n<head>\n<link rel='stylesheet'href='http://localhost:8080/style'>\n</head>\n<body>\n\n<ul>\n  <li><a href='http://localhost:8080/'>Home</a></li>\n  <li><a href='http://localhost:8080/visualizzaeventi'>Visualizza eventi disponibili</a></li>\n  <li><a href='http://localhost:8080/visualizzabiglietti'>I miei biglietti</a></li>\n</ul>\n\n<div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>\n " +
-    //            data +
-    //            "</div>\n\n</body>\n</html>\n"
-
     fs = require('fs');
     var data = fs.readFileSync('../Client/buyer/compraBiglietto.html', 'utf8');
     data = data.replace("${address}", address);
@@ -199,14 +193,11 @@ function main(a){
         const fs = require('fs');
         var data = fs.readFileSync('contracts.json', 'utf8');
         address = data.split("\n");
-        console.log(address);
+        address.pop()
         var list = [];
-        for(var i=0; i < address.length -1 ; i++){
+        for(var i=0; i < address.length; i++){
           var add = JSON.parse(address[i]).address;
-          console.log("dioc->" + add);
           var contract = new Contract(abi, add);
-          console.log("CAZZO");
-          console.log("###->" + JSON.parse(address[i]).address);
           var listaBiglietti = [];
           await contract.methods.getBigliettoByAddress().call({from: a})
               .then((result) => {
@@ -216,9 +207,9 @@ function main(a){
                 console.log("errore sulla getBigliettoByAddress")
               });
 
-              for(var i = 0; i < listaBiglietti.length; i++){
+              for(var j = 0; j < listaBiglietti.length; j++){
                 var o = {};
-                await contract.methods.getBiglietto(i).call()
+                await contract.methods.getBiglietto(j).call()
                   .then((result) => {
                     obj = Object.values(result);
                     o.okOp = obj[0];
@@ -239,119 +230,11 @@ function main(a){
                 o.stato = event_data.stato;
                 list.push(o)
               }
-            console.log("Oggetto o--->" + JSON.stringify(o));
         }
-        console.log("#############-->" + JSON.stringify(list) + "\n");
-        // for(i = 0; i < listaEventi.length - 1; i++){
-        //   var address = JSON.parse(listaEventi[i]).address
-        //   var a = {};
-        //   await getEventData(address).then((result) => {
-        //       a = result;
-        //   })
-        //   a = JSON.parse(a)
-        //   a.address = address;
-        //   o.push(a);
-        // }
+        console.log("Ritornata lista di biglietti dell'utente " + a);
+
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(list));
     });
 
   }
-
-
-
-
-
-  // console.log("used account: " + a);
-  //
-  // var address = "0x84272f3E148eb3f957E3Df666d91a15a6Bd1DB7F";
-  //
-  //
-  // //var Contract = new web3.eth.contract.setProvider()
-  // var Contract = require('web3-eth-contract');
-  //
-  // // set provider for all later instances to use
-  // Contract.setProvider(nodo);
-  //
-  // var contract = new Contract(abi, address);
-  //
-  // contract.methods.getEventManager().call()
-  // .then((result) => {
-  //   console.log("getEventManager() -> " + result);
-  // });
-  //
-  // contract.methods.getBuyer().call()
-  // .then((result) => {
-  //   console.log("getBuyer() -> " + result);
-  // });
-  //
-  // contract.methods.getReseller().call()
-  // .then((result) => {
-  //   console.log("getReseller() -> " + result);
-  // });
-  //
-  // contract.methods.getValidator().call()
-  // .then((result) => {
-  //   console.log("getValidator() -> " + result);
-  // });
-  //
-  //
-  //   contract.methods.isOnSale().call()
-  //   .then((result) => {
-  //     if(result == true){
-  //
-  //       contract.methods.getAddressChiamante().call({from: a})
-  //       .then((addr) => {
-  //         console.log("getAddressChiamante() -> " + addr);
-  //       });
-  //
-  //       contract.methods.getAddresses().call()
-  //       .then((ruoli) => {
-  //         wallets = Object.values(ruoli);
-  //         console.log("get addresses(): " +
-  //                     "\n eventManager -> " + wallets[0] +
-  //                     "\n buyer - > " + wallets[1] +
-  //                     "\n reseller - > " + wallets[2] +
-  //                     "\n validator - > " + wallets[3]);
-  //       })
-  //
-  //       contract.methods.venditaBiglietto(a).send({from: a})
-  //       .on('receipt', function(){
-  //         console.log("venditaBiglietto() -> OK");
-  //
-  //         contract.methods.getTicketCounter().call()
-  //         .then((a) => {
-  //           console.log("getTicketCounter() -> " + a);
-  //
-  //           contract.methods.getBiglietto(a - 1).call()
-  //           .then((biglietto) => {
-  //             v = Object.values(biglietto)
-  //             if(v[0]){
-  //               console.log("getBiglietto(): \n" +
-  //                           "ticketId = " + v[1] + "\n" +
-  //                            "validateHash = " + v[2] + "\n" +
-  //                            "isValid = " + v[3] + "\n" +
-  //                            "endorsed = " + v[4] + "\n" +
-  //                            "ownerAddress = " + v[5] + "\nFINE")
-  //             }else{
-  //               console.log("Id del biglietto non valido!");
-  //             }
-  //
-  //           });
-  //
-  //         });
-  //
-  //         contract.methods.getPostiDisponibili().call({from: a})
-  //         .then((a) => {
-  //           console.log("getPostiDisponibili() -> " + a);
-  //         });
-  //
-  //       });
-  //     } else {
-  //       contract.methods.getAddressChiamante().call({from: a})
-  //       .then((a) => {
-  //         console.log("getAddressChiamante() -> " + a);
-  //       });
-  //       console.log("I biglietti per l'evento selezionato sono esauriti!");
-  //     }
-  //   });

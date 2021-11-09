@@ -11,23 +11,23 @@
           return response.json();
         })
         .then(function (myJson) {
-          const tabellaEventi = document.querySelector("#tickets");
+          const tabellaEventi = document.querySelector("#eventi");
           $(document).ready(function () {
                 var json = myJson;
                 var tr;
                 for (var i = 0; i < json.length; i++) {
                     tr = $('<tr/>');
-                    tr.append("<td>" + json[i].nome + "</td>");
+                    tr.append("<td>" + json[i].nomeEvento + "</td>");
                     tr.append("<td>" + json[i].data + "</td>");
-                    tr.append("<td>" + json[i].numPosti + "</td>");
-                    tr.append("<td>" + json[i].postiDisponibili + "</td>");
-                    tr.append("<td>" + json[i].prezzoBiglietto + "</td>");
-                    tr.append("<td>" + json[i].ticketCounter + "</td>");
-                    tr.append("<td>" + json[i].address + "</td>");
+                    tr.append("<td>" + json[i].prezzoBiglietto + "€" + "</td>");
                     tr.append("<td>" + json[i].luogo + "</td>");
                     tr.append("<td>" + json[i].stato + "</td>");
-                    tr.append("<td><button class=\"bottone\" onClick = \"window.location.href='http://localhost:8080/acquistabiglietto?address=" + json[i].address + "'\">Compra</button>" +
-                              "</td>");
+                    tr.append("<td>" + json[i].id + "</td>");
+                    tr.append("<td>" + json[i].isValid + "</td>");
+                    tr.append("<td>" + json[i].isEndorsed + "</td>");
+                    tr.append("<td>" + json[i].hash + "</td>");
+                    // tr.append("<td><button class=\"bottone\" onClick = \"window.location.href='http://localhost:8080/acquistabiglietto?address=" + json[i].address + "'\">Compra</button>" +
+                    //           "</td>");
 
                     $('table').append(tr);
                 }
@@ -41,9 +41,9 @@
 
 
 <ul>
-  <li><a href=""href="http://localhost:8080/">Home</a></li>
+  <li><a href="http://localhost:8080/">Home</a></li>
   <li><a href="http://localhost:8080/visualizzaeventi">Visualizza eventi disponibili</a></li>
-  <li><a  class="active" href="http://localhost:8080/visualizzabiglietti">I miei biglietti</a></li>
+  <li><a class="active" href="http://localhost:8080/visualizzabiglietti">I miei biglietti</a></li>
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
@@ -51,18 +51,17 @@
 
   <h1>I miei biglietti</h1>
 
-  <table id="tickets">
+  <table id="eventi">
     <tr>
       <th>Nome dell'Evento</th>
       <th>Data</th>
-      <th>Numero posti</th>
-      <th>Posti disponibili</th>
       <th>Prezzo biglietto</th>
-      <th>Biglietti venduti</th>
-      <th>Indirizzo</th>
       <th>Luogo</th>
       <th>Stato</th>
-      <th>Acquista</th>
+      <th>Numero del biglietto</th>
+      <th>Validita'</th>
+      <th>Timbrato</th>
+      <th>Codice univoco</th>
     </tr>
   </table>
 
