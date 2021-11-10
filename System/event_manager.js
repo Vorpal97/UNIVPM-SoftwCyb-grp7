@@ -159,91 +159,114 @@ function main(a){
     data = data.replace("${evento.luogo}", evento.luogo);
     data = data.replace("${evento.numPosti}", evento.numPosti);
     data = data.replace("${evento.stato}", evento.stato);
+    data = data.replace("${evento.ticketCounter}", evento.ticketCounter);
 
    res.setHeader('Content-Type', 'text/html');
    res.end(data);
   });
 
-  app.post("/aggiornaevento", (req, res) => {
+  app.post("/aggiornaevento", async(req, res) => {
     var nome = req.body.eventName;
     var data = req.body.eventDate;
     var numPosti = req.body.eventNPosti;
     var luogo = req.body.eventPlace;
     var stato = req.body.eventStatus;
     var address = req.body.address;
+    var inserted_date = data.split("-");
+
+    eventdata = await getEventData(address)
+    console.log(eventdata)
+    var curEvent = JSON.parse(eventdata);
+
+    var curev_data = curEvent.data;
+    var tmp = curev_data.split("-");
+    curev_data = new Date(tmp[1] + "/" + tmp[2] + "/" + tmp[0])
 
     var Contract = require('web3-eth-contract');
     Contract.setProvider(nodo);
     var contract = new Contract(abi, address);
 
-    contract.methods.setNomeEvento(nome).send({from: a})
-    .on('receipt', function(){
-        console.log("Nome evento aggiornato a " + nome);
-    });
+    var data = inserted_date[1] + "/" + inserted_date[2] + "/" + inserted_date[0];
+    var data = new Date(data);
+    var regex = /\d+/;
+    var toDay = new Date()
+    var dateMin = new Date(toDay.getFullYear(), toDay.getMonth(), toDay.getDate() +7);
+    dateMin.setDate(dateMin.getDate());
 
-    //INSERIRE CONTROLLO CHE IMPEDISCE DI SETTARE numPosti < ticketCounter
+    if (!regex.test(numPosti) || (data.getTime() != curev_data.getTime() && (data.getTime() < dateMin.getTime())) || parseInt(numPosti) < parseInt(curEvent.ticketCounter)){
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({stato:"errore"}));
+    } else {
+      data = data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate();
+      contract.methods.setNomeEvento(nome).send({from: a})
+      .on('receipt', function(){
+          console.log("Nome evento aggiornato a " + nome);
+      });
 
-    contract.methods.setNumPosti(numPosti).send({from: a})
-    .on('receipt', function(){
-        console.log("Numero posti evento aggiornato a " + numPosti);
-    });
+      //INSERIRE CONTROLLO CHE IMPEDISCE DI SETTARE numPosti < ticketCounter
 
-    contract.methods.setData(data).send({from: a})
-    .on('receipt', function(){
-        console.log("Data evento aggiornato a " + data);
-    });
+      contract.methods.setNumPosti(numPosti).send({from: a})
+      .on('receipt', function(){
+          console.log("Numero posti evento aggiornato a " + numPosti);
+      });
 
-    contract.methods.setLuogo(luogo).send({from: a})
-    .on('receipt', function(){
-        console.log("Luogo evento aggiornato a " + luogo);
-    });
+      contract.methods.setData(data).send({from: a})
+      .on('receipt', function(){
+          console.log("Data evento aggiornato a " + data);
+      });
 
-    var statoNum = -1;
+      contract.methods.setLuogo(luogo).send({from: a})
+      .on('receipt', function(){
+          console.log("Luogo evento aggiornato a " + luogo);
+      });
 
-    console.log("stato da settare a " + stato)
+      var statoNum = -1;
 
-    switch (stato) {
-      case "inVendita":
-        contract.methods.setStatoInVendita().send({from: a})
-        .on('receipt', function(){
-            console.log("Stato evento aggiornato " + nome + " created");
-        });
-        break;
-      case "inCorso":
-        contract.methods.setStatoInCorso().send({from: a})
-        .on('receipt', function(){
-            console.log("Stato evento aggiornato " + nome + " created");
-        });
-        break;
-      case "sospeso":
-        contract.methods.setStatoSospeso().send({from: a})
-        .on('receipt', function(){
-            console.log("Stato evento aggiornato " + nome + " created");
-        });
-        break;
-      case "soldout":
-        contract.methods.setStatoSoldout().send({from: a})
-        .on('receipt', function(){
-            console.log("Stato evento aggiornato " + nome + " created");
-        });
-        break;
-      case "cancellato":
-        contract.methods.setStatoCancellato().send({from: a})
-        .on('receipt', function(){
-            console.log("Stato evento aggiornato " + nome + " created");
-        });
-        break;
-      case "terminato":
-        contract.methods.setStatoTerminato().send({from: a})
-        .on('receipt', function(){
-            console.log("Stato evento aggiornato " + nome + " created");
-        });
-        break;
-      default:
-      // ERRORE
+      console.log("stato da settare a " + stato)
+
+      switch (stato) {
+        case "inVendita":
+          contract.methods.setStatoInVendita().send({from: a})
+          .on('receipt', function(){
+              console.log("Stato evento aggiornato " + nome + " created");
+          });
+          break;
+        case "inCorso":
+          contract.methods.setStatoInCorso().send({from: a})
+          .on('receipt', function(){
+              console.log("Stato evento aggiornato " + nome + " created");
+          });
+          break;
+        case "sospeso":
+          contract.methods.setStatoSospeso().send({from: a})
+          .on('receipt', function(){
+              console.log("Stato evento aggiornato " + nome + " created");
+          });
+          break;
+        case "soldout":
+          contract.methods.setStatoSoldout().send({from: a})
+          .on('receipt', function(){
+              console.log("Stato evento aggiornato " + nome + " created");
+          });
+          break;
+        case "cancellato":
+          contract.methods.setStatoCancellato().send({from: a})
+          .on('receipt', function(){
+              console.log("Stato evento aggiornato " + nome + " created");
+          });
+          break;
+        case "terminato":
+          contract.methods.setStatoTerminato().send({from: a})
+          .on('receipt', function(){
+              console.log("Stato evento aggiornato " + nome + " created");
+          });
+          break;
+        default:
+        // Errore
+      }
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({stato:"successo"}));
   }
-  // res.setHeader('Content-Type', 'application/json');
-   res.end("");
 
   })
 
@@ -257,6 +280,24 @@ function main(a){
     var numPosti = req.body.eventNPosti;
     var prezzoBiglietto = req.body.eventPrice;
     var luogo = req.body.eventPlace;
+    var inserted_date = data.split("-");
+
+    var data = inserted_date[1] + "/" + inserted_date[2] + "/" + inserted_date[0];
+    var data = new Date(data);
+
+    console.log("Data nel body------->"  + data.getTime());
+
+    var regex = /\d+/;
+    var toDay = new Date()
+    var dateMin = new Date(toDay.getFullYear(), toDay.getMonth(), toDay.getDate());
+    dateMin.setDate(dateMin.getDate() + 7);
+    console.log("Data Minima------->"  + dateMin.getTime());
+
+    if((!(regex.test(numPosti) && regex.test(prezzoBiglietto))) || (data.getTime() < dateMin.getTime())){
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({stato:"errore"}));
+    } else {
+      data = data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate() ;
 
      console.log ("Nuovo evento creato: \n" +
                    "nome: " + nome + "\n" +
@@ -339,7 +380,10 @@ function main(a){
         });
 
       }
-      res.redirect("/")
+
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({stato:"successo"}));
+    }
   });
 
   app.get('/ottienieventi', (req, res) => {
