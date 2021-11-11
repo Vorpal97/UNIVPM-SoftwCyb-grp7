@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet"href="http://localhost:8080/style">
+  <meta charset="UTF-8">
+</head>
+<body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+
+      function sino(flag){
+        if(flag){
+          return "Sì"
+        } else {
+          return "No"
+        }
+      }
+
+      function vidima(_address, _id){
+        obj = {
+          address : _address,
+          id : _id
+        }
+
+        console.log(obj)
+
+        if(obj.address == "" || obj.id == null ){
+          alert("Si è verificato un errore ");
+        } else {
+            $.ajax({
+                 type: "POST",
+                 url: "http://localhost:8080/vidimabiglietto",
+                 data: obj,
+                 success: function(d) {
+                   if(d.stato == "successo"){
+                     console.log(d)
+                     alert("Evento vidimato correttamente!");
+                     refresh(_address);
+                   } else {
+                     console.log(d)
+                     alert("Si è verificato un errore");
+                   }
+                 }
+              });
+      }
+    }
+
+      function refresh(address){
+        $("#eventi tbody").remove();
+        fetch("http://localhost:8080/alltickets?address=" + address)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (myJson) {
+            const tabellaEventi = document.querySelector("#eventi");
+            $(document).ready(function () {
+                  address = $("input[type='hidden'][id='address']").val();
+                  var json = myJson;
+                  console.log(json)
+                  var tr;
+                  $('table').append("<tbody>")
+                  for (var i = 0; i < json.length; i++) {
+                      tr = $('<tr/>');
+                      tr.append("<td>" + json[i].id + "</td>");
+                      tr.append("<td>" + sino(json[i].isValid) + "</td>");
+                      tr.append("<td>" + sino(json[i].isEndorsed) + "</td>");
+                      tr.append("<td>" + json[i].owner + "</td>");
+                      tr.append("<td>" + json[i].hash + "</td>");
+                      if(json[i].isEndorsed){
+                        tr.append("<td><button class=\"bottoneDisabled\" onClick = 'vidima(\"" + address + "\","+ json[i].id + ")'\" disabled>Vidimato</button>" +
+                                "</td>");
+                      } else {
+                        tr.append("<td><button class=\"bottone\" onClick = 'vidima(\"" + address + "\","+ json[i].id + ")'\">Vidima</button>" +
+                                "</td>");
+
+                      }
+
+
+                      $('table').append(tr);
+                  }
+                  $('table').append("</tbody>")
+
+          });
+
+          })
+          .catch(function (error) {
+            console.log("Error: " + error);
+          });
+      }
+
+      var address
+      window.addEventListener("load", function(){
+        address = $("input[type='hidden'][id='address']").val()
+        refresh(address)
+      });
+
+    </script>
+
+
+<ul>
+  <li><a href="http://localhost:8080/">Home</a></li>
+  <li><a class="active" href="http://localhost:8080/visualizzaeventi">Vidima Biglietti</a></li>
+</ul>
+
+<div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
+  <div class="riquadro">
+
+    <input type="hidden" id="address" value="${address}">
+
+  <h1>Biglietti per l'evento selezionato</h1>
+
+  <table id="eventi">
+    <thead>
+    <tr>
+      <th>Numero di serie</th>
+      <th>Validità</th>
+      <th>Vidimato</th>
+      <th>Acquirente</th>
+      <th>Codice univoco</th>
+      <th></th>
+    </tr>
+  </thead>
+  </table>
+
+</div>
+
+</div>
+
+</body>
+</html>
