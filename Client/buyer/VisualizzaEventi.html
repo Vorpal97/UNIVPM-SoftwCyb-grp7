@@ -26,8 +26,15 @@
                     tr.append("<td>" + json[i].address + "</td>");
                     tr.append("<td>" + json[i].luogo + "</td>");
                     tr.append("<td>" + json[i].stato + "</td>");
-                    tr.append("<td><button class=\"bottone\" onClick = \"window.location.href='http://localhost:8080/acquistabiglietto?address=" + json[i].address + "'\">Compra</button>" +
-                              "</td>");
+                    if(json[i].stato == "inVendita"){
+                      tr.append("<td><button class=\"bottone\" onClick = \"window.location.href='http://localhost:8080/acquistabiglietto?address=" + json[i].address + "'\" >Compra</button>" +
+                                "</td>");
+                    } else {
+                      tr.append("<td><button class=\"bottoneDisabled\" onClick = \"window.location.href='http://localhost:8080/acquistabiglietto?address=" + json[i].address + "'\" disabled >Compra</button>" +
+                                "</td>");
+
+                    }
+
 
                     $('table').append(tr);
                 }
