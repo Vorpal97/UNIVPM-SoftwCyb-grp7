@@ -25,6 +25,7 @@
                     tr.append("<td>" + json[i].address + "</td>");
                     tr.append("<td>" + json[i].luogo + "</td>");
                     tr.append("<td>" + json[i].stato + "</td>");
+                    tr.append("<td>" + (json[i].prezzoBiglietto*json[i].ticketCounter) + "€</td>");
                     tr.append("<td><a href='http://localhost:8080/modificaevento?address=" + json[i].address +
                               "'><img src='https://pic.onlinewebfonts.com/svg/img_354025.png' height='25px'width='25px'><a/>" +
                               "</td>");
@@ -59,6 +60,7 @@
       <th>Indirizzo</th>
       <th>Luogo</th>
       <th>Stato</th>
+      <th>Guadagno</th>
       <th>Opzioni</th>
     </tr>
   </table>
