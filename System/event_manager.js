@@ -80,6 +80,11 @@ async function getEventData(address){
     tmp.numPosti = result;
   });
 
+  await contract.methods.getPostiDisponibili().call()
+  .then((result) => {
+    tmp.postiDisponibili = result;
+  });
+
   await contract.methods.getPrezzoBiglietto().call()
   .then((result) => {
     tmp.prezzoBiglietto = result;
@@ -203,11 +208,15 @@ function main(a){
           console.log("Nome evento aggiornato a " + nome);
       });
 
-      //INSERIRE CONTROLLO CHE IMPEDISCE DI SETTARE numPosti < ticketCounter
 
       contract.methods.setNumPosti(numPosti).send({from: a})
       .on('receipt', function(){
           console.log("Numero posti evento aggiornato a " + numPosti);
+      });
+
+      contract.methods.setPostiDisponibili(parseInt(numPosti) - parseInt(curEvent.ticketCounter)).send({from: a})
+      .on('receipt', function(){
+          console.log("Posti disponibili evento aggiornato a " + (parseInt(numPosti) - parseInt(curEvent.ticketCounter)));
       });
 
       contract.methods.setData(data).send({from: a})
