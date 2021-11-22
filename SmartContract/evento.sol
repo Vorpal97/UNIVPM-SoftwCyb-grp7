@@ -88,11 +88,11 @@ contract Evento {
       }
     }
 
-    function getBigliettoByAddress() public view returns (uint256[] memory) {
-      uint256[] memory tickets;
+    function getBigliettoByAddress() public view returns (string memory) {
+      string memory tickets;
       for (uint256 i=0; i < ticketCounter; i++){
         if (listaBiglietti[i].ownerAddress == msg.sender){
-          tickets[i] = i;
+          tickets = append(tickets, uint2str(listaBiglietti[i].ticketId), ";");
         }
       }
       return tickets;
@@ -166,6 +166,12 @@ contract Evento {
         numPosti = _newNumPosti;
       }
     }
+
+  function setPostiDisponibili(uint256 _newPostiDisponibili) public {
+    if(msg.sender == eventManager){
+      postiDisponibili = _newPostiDisponibili;
+    }
+  }
 
     function setData(string memory _dataEvento) public {
       if(msg.sender == eventManager){
@@ -257,4 +263,30 @@ contract Evento {
         }
       }
     }
+
+    function append(string memory a, string memory b, string memory c) internal pure returns (string memory) {
+      return string(abi.encodePacked(a, b, c));
+  }
+
+  function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
+          if (_i == 0) {
+              return "0";
+          }
+          uint j = _i;
+          uint len;
+          while (j != 0) {
+              len++;
+              j /= 10;
+          }
+          bytes memory bstr = new bytes(len);
+          uint k = len;
+          while (_i != 0) {
+              k = k-1;
+              uint8 temp = (48 + uint8(_i - _i / 10 * 10));
+              bytes1 b1 = bytes1(temp);
+              bstr[k] = b1;
+              _i /= 10;
+          }
+          return string(bstr);
+      }
 }
