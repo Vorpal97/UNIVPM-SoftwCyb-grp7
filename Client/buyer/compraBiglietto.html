@@ -2,13 +2,61 @@
   <head>
     <link rel='stylesheet'href='http://localhost:8080/style'>
   </head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
   <script type="text/javascript">
+  var prezzo = ${evento.prezzoBiglietto};
+  var address = "${address}";
+
+  window.addEventListener("load", function(){
+    document.getElementById("prezzoBiglietto").innerHTML = prezzo + " euro";
+    document.getElementById("prezzoTotale").innerHTML = prezzo + " euro";
+
+  });
+
     function acquista(){
-      window.location.href='http://localhost:8080/acquista?address=' + document.getElementById("address").value
+      obj = {
+        address : address,
+        numeroBiglietti : document.getElementById("numBiglietti").value
+      }
+      console.log(obj)
+      $.ajax({
+         type: "POST",
+         url: "http://localhost:8080/acquista",
+         data: obj,
+         success: function(d) {
+           console.log(d)
+           if(d.stato == "successo"){
+             alert("Biglietti acquistati correttamente!");
+             window.location.href='http://localhost:8080/visualizzaeventi';
+           } else {
+             alert("Si è verificato un errore");
+           }
+         }
+      });
     }
 
     function annulla(){
       window.location.href='http://localhost:8080/visualizzaeventi';
+    }
+
+    function incremento(){
+      var qta = document.getElementById("numBiglietti").value
+      if(/^\d+$/.test(qta)){
+        if (qta > 5){
+          document.getElementById("numBiglietti").value = 5
+          qta = 5;
+        }
+        if (qta < 1){
+          document.getElementById("numBiglietti").value = 1
+          qta = 1;
+        }
+      } else {
+        document.getElementById("numBiglietti").value = 1
+        qta = 1;
+      }
+
+      document.getElementById("prezzoTotale").innerHTML = (prezzo * qta) + " euro";
     }
   </script>
 
@@ -23,15 +71,17 @@
     <div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>
       <div class="center">
         <div class="riquadro" style="width: fit-Content;">
-          <h2>Acquista 1 biglietto per quest'evento</h2><br>
+          <h2>Acquista biglietti per quest'evento</h2><br>
           <table id="eventi">
-            <input type="hidden" value="${address}" id="address">
             <tr><td> Nome evento</td><td>${evento.nome}</td></tr>
             <tr><td>Data dell'evento</td><td>${evento.data} </td></tr>
             <tr><td>Luogo dell'evento</td><td>${evento.luogo} </td></tr>
             <tr><td>Numero posti</td><td>${evento.numPosti}</td></tr>
-            <tr><td> Posti disponibli</td><td>${evento.postiDisponibili} </td></tr>
-            <tr><td>Prezzo</td><td>${evento.prezzoBiglietto} euro</td></tr>
+            <tr><td>Posti disponibli</td><td>${evento.postiDisponibili} </td></tr>
+            <tr><td>Numero biglietti</td><td><input type="number" id="numBiglietti" min="1" max="5" value="1" onchange="incremento()"></td></tr>
+            <tr><td>Prezzo biglietto</td><td id="prezzoBiglietto"></td></tr>
+            <tr><td>Prezzo Totale</td><td id="prezzoTotale"></td></tr>
+
           </table>
           <div style="margin-top: 20px">
             <button class="bottone" onClick="acquista()"> Conferma </button>

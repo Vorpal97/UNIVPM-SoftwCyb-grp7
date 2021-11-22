@@ -8,6 +8,7 @@ const path = require('path');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json())
 
 
 let nodo = 'http://localhost:22001';
@@ -173,18 +174,25 @@ function main(a){
     console.log('Il client del Buyer è accessibile a http://127.0.0.1:8080/');
   });
 
-  app.get("/acquista", (req, res) => {
-    address = req.query.address;
-    console.log(address)
+  app.post("/acquista", async(req, res) => {
+    address = req.body.address;
+    numBiglietti = req.body.numeroBiglietti;
+    console.log("address: " + address)
+    console.log("numbiglietti: " + numBiglietti)
 
     var Contract = require('web3-eth-contract');
     Contract.setProvider(nodo);
     var contract = new Contract(abi, address);
-    contract.methods.venditaBiglietto(a).send({from: a})
-            .on('receipt', function(){
-             console.log("venditaBiglietto() -> OK");
-             res.redirect("http://localhost:8080/")
-      });
+
+    for(var i = 0; i < parseInt(numBiglietti); i++){
+      await contract.methods.venditaBiglietto(a).send({from: a})
+                  .on('receipt', function(){
+                   console.log("venditaBiglietto " + i + " -> OK");
+          });
+      }
+
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({stato:"successo"}));
     });
 
     app.get('/mytickets', async(req, res) => {
