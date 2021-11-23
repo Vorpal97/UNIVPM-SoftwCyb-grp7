@@ -10,6 +10,25 @@
     window.addEventListener("load", function(){
       var stato = $("input[type='hidden'][id='stato']").val();
       document.getElementById("radio" + stato).checked = true;
+
+      var data = "${evento.data}";
+
+      mydata = data.split("-");
+      anno = mydata[0];
+      mese = mydata[1];
+      giorno = mydata[2];
+
+      if(parseInt(mese) < 10){
+        mese = "0" + mese;
+      }
+
+      if(parseInt(giorno) < 10){
+        giorno = "0" + giorno;
+      }
+
+      data = anno + "-" + mese + "-" + giorno;
+      $('#eventDate').attr('value', data);
+
     });
 
     $(function(){
@@ -93,7 +112,7 @@
         <label for='fname'>Nome dell'evento:</label><br>
         <input type='text' value='${evento.nome}' id='eventName' required><br>
         <label for='fname'>Data dell'evento:</label><br>
-        <input type='date' value='${evento.data}' id='eventDate' required pattern="\d{4}-\d{2}-\d{2}"><br>
+        <input type='date' value='' id='eventDate' required pattern="yyyy-mm-d"><br>
         <label for='fname'>Luogo dell'evento:</label><br>
         <input type='text' value='${evento.luogo}' id='eventPlace' required><br>
         <label for='fname'>Numero posti:</label><br>

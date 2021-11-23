@@ -166,6 +166,7 @@ function main(a){
     data = data.replace("${evento.stato}", evento.stato);
     data = data.replace("${evento.ticketCounter}", evento.ticketCounter);
 
+
    res.setHeader('Content-Type', 'text/html');
    res.end(data);
   });
