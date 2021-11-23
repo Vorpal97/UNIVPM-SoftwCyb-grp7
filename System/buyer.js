@@ -183,16 +183,30 @@ function main(a){
     var Contract = require('web3-eth-contract');
     Contract.setProvider(nodo);
     var contract = new Contract(abi, address);
+    var alltickets_string;
 
-    for(var i = 0; i < parseInt(numBiglietti); i++){
-      await contract.methods.venditaBiglietto(a).send({from: a})
-                  .on('receipt', function(){
-                   console.log("venditaBiglietto " + i + " -> OK");
-          });
-      }
+    var listaBiglietti = [];
+    await contract.methods.getBigliettoByAddress().call({from: a})
+        .then((result) => {
+          listaBiglietti = result.split(";");
+          listaBiglietti.pop();
+        }).catch(()=>{
+          console.log("errore sulla getBigliettoByAddress")
+        });
 
+    if((listaBiglietti.length + parseInt(numBiglietti)) <= 10 ){
+      for(var i = 0; i < parseInt(numBiglietti); i++){
+        await contract.methods.venditaBiglietto(a).send({from: a})
+                    .on('receipt', function(){
+                     console.log("venditaBiglietto " + i + " -> OK");
+            });
+        }
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({stato:"successo"}));
+    } else {
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({stato:"successo"}));
+      res.end(JSON.stringify({stato:"erroreqta"}));
+    }
     });
 
     app.get('/mytickets', async(req, res) => {

@@ -1,6 +1,7 @@
 <html>
   <head>
     <link rel='stylesheet'href='http://localhost:8080/style'>
+      <meta charset="UTF-8">
   </head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
@@ -29,8 +30,11 @@
            if(d.stato == "successo"){
              alert("Biglietti acquistati correttamente!");
              window.location.href='http://localhost:8080/visualizzaeventi';
+           } else if(d.stato == "erroreqta"){
+             alert("Non puoi acquistare più di 10 biglietti!");
+             window.location.href='http://localhost:8080/visualizzaeventi';
            } else {
-             alert("Si è verificato un errore");
+             alert("Si è verificato un errore!");
            }
          }
       });
@@ -43,9 +47,9 @@
     function incremento(){
       var qta = document.getElementById("numBiglietti").value
       if(/^\d+$/.test(qta)){
-        if (qta > 5){
-          document.getElementById("numBiglietti").value = 5
-          qta = 5;
+        if (qta > 10){
+          document.getElementById("numBiglietti").value = 10
+          qta = 10;
         }
         if (qta < 1){
           document.getElementById("numBiglietti").value = 1
@@ -78,7 +82,7 @@
             <tr><td>Luogo dell'evento</td><td>${evento.luogo} </td></tr>
             <tr><td>Numero posti</td><td>${evento.numPosti}</td></tr>
             <tr><td>Posti disponibli</td><td>${evento.postiDisponibili} </td></tr>
-            <tr><td>Numero biglietti</td><td><input type="number" id="numBiglietti" min="1" max="5" value="1" onchange="incremento()"></td></tr>
+            <tr><td>Numero biglietti</td><td><input type="number" id="numBiglietti" min="1" max="10" value="1" onchange="incremento()"></td></tr>
             <tr><td>Prezzo biglietto</td><td id="prezzoBiglietto"></td></tr>
             <tr><td>Prezzo Totale</td><td id="prezzoTotale"></td></tr>
 
