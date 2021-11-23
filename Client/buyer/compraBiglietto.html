@@ -16,16 +16,24 @@
   });
 
     function acquista(){
+      $("#btnAcquista").prop("disabled",true);
+
       obj = {
         address : address,
         numeroBiglietti : document.getElementById("numBiglietti").value
       }
       console.log(obj)
+
+
+      $("body").css("cursor", "progress");
       $.ajax({
          type: "POST",
          url: "http://localhost:8080/acquista",
          data: obj,
          success: function(d) {
+           $("body").css("cursor", "default");
+           $("#btnAcquista").prop("disabled",false);
+
            console.log(d)
            if(d.stato == "successo"){
              alert("Biglietti acquistati correttamente!");
@@ -88,7 +96,7 @@
 
           </table>
           <div style="margin-top: 20px">
-            <button class="bottone" onClick="acquista()"> Conferma </button>
+            <button id="btnAcquista" class="bottone" onClick="acquista()"> Conferma </button>
             <button class="bottoneCanc" onClick="annulla()"/> Annulla </button>
           </div>
         </div>
