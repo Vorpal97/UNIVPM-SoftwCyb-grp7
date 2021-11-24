@@ -179,34 +179,42 @@ function main(a){
     numBiglietti = req.body.numeroBiglietti;
     console.log("address: " + address)
     console.log("numbiglietti: " + numBiglietti)
+    evento = await getEventData(address)
+    if(evento.stato == "inVendita"){
+      var Contract = require('web3-eth-contract');
+      Contract.setProvider(nodo);
+      var contract = new Contract(abi, address);
+      var alltickets_string;
 
-    var Contract = require('web3-eth-contract');
-    Contract.setProvider(nodo);
-    var contract = new Contract(abi, address);
-    var alltickets_string;
+      var listaBiglietti = [];
+      await contract.methods.getBigliettoByAddress().call({from: a})
+          .then((result) => {
+            listaBiglietti = result.split(";");
+            listaBiglietti.pop();
+          }).catch(()=>{
+            console.log("errore sulla getBigliettoByAddress")
+          });
 
-    var listaBiglietti = [];
-    await contract.methods.getBigliettoByAddress().call({from: a})
-        .then((result) => {
-          listaBiglietti = result.split(";");
-          listaBiglietti.pop();
-        }).catch(()=>{
-          console.log("errore sulla getBigliettoByAddress")
-        });
-
-    if((listaBiglietti.length + parseInt(numBiglietti)) <= 10 ){
-      for(var i = 0; i < parseInt(numBiglietti); i++){
-        await contract.methods.venditaBiglietto(a).send({from: a})
-                    .on('receipt', function(){
-                     console.log("venditaBiglietto " + i + " -> OK");
-            });
-        }
+      if((listaBiglietti.length + parseInt(numBiglietti)) <= 10 ){
+        for(var i = 0; i < parseInt(numBiglietti); i++){
+          await contract.methods.venditaBiglietto(a).send({from: a})
+                      .on('receipt', function(){
+                       console.log("venditaBiglietto " + i + " -> OK");
+              });
+          }
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({stato:"successo"}));
+      } else {
         res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({stato:"successo"}));
+        res.end(JSON.stringify({stato:"erroreqta"}));
+      }
     } else {
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({stato:"erroreqta"}));
+      res.end(JSON.stringify({stato:"errore"}));
     }
+
+
+
     });
 
     app.get('/mytickets', async(req, res) => {

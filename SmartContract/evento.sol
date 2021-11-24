@@ -33,6 +33,7 @@ contract Evento {
     Biglietto[] listaBiglietti;
     uint256 ticketCounter;
     bool initialization = true;
+    bool pagato = false;
 
 
     //INITIALIZATION
@@ -106,6 +107,14 @@ contract Evento {
       }
     }
 
+    function isTerminato() public view returns (bool){
+      if(stato == status.terminato){
+        return true;
+      } else{
+        return false;
+      }
+    }
+
 
 
     /*function send() public payable {
@@ -152,6 +161,10 @@ contract Evento {
 
     function getStato() public view returns (status){
         return stato;
+    }
+
+    function getPagato() public view returns (bool) {
+        return pagato;
     }
 
     //SETTER
@@ -227,8 +240,15 @@ contract Evento {
       }
     }
 
+    function setPagato() public {
+      if(msg.sender == eventManager){
+        pagato = true;
+      }
+    }
+
 
     //SERVICES
+
     function isOnSale() public view returns (bool){
         if(stato == status.inVendita)
           return true;
@@ -262,6 +282,14 @@ contract Evento {
           listaBiglietti[ticketId].endorsed = true;
         }
       }
+    }
+
+    function redistribuisciIncassi() public view returns(int256){
+      if(msg.sender == eventManager){
+          int256 t = int256((ticketCounter * prezzoBiglietto) / 2);
+          return t;
+      }
+      return -1;
     }
 
     function append(string memory a, string memory b, string memory c) internal pure returns (string memory) {

@@ -280,6 +280,54 @@ function main(a){
 
   })
 
+  app.get('/redistribuisci', async(req, res) => {
+    var address = req.query.address;
+
+    var Contract = require('web3-eth-contract');
+    Contract.setProvider(nodo);
+    var contract = new Contract(abi, address);
+
+    var risultato;
+    var pagato;
+    var terminato;
+
+    await contract.methods.getPagato().call()
+      .then((result) => {
+        pagato = result;
+      })
+
+    await contract.methods.isTerminato().call()
+      .then((result) => {
+      terminato = result;
+    })
+
+    if(!pagato && terminato){
+      await contract.methods.redistribuisciIncassi().call({from: a})
+      .then((result) => {
+        risultato = result;
+      })
+      await contract.methods.setPagato().send({from: a})
+      .on('receipt', function(){
+        console.log("setPagato --> OK")
+      }).catch(()=>{
+        console.log("setPagato --> ERRORE")
+      });
+      console.log("Redistribuzione incassi --> OK");
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({stato:"successo", incasso:risultato}));
+    }else if(terminato && pagato){
+      console.log("Redistribuzione incassi --> GIA AVVENUTA");
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({stato:"pagato"}));
+    }else{
+      console.log("Redistribuzione incassi --> ERRORE");
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({stato:"errore"}));
+    }
+
+  });
+
+
   app.get('/visualizzaeventi', (req, res) => {
     res.sendFile(path.resolve('../Client/event_manager/VisualizzaEventi.html'));
   });
