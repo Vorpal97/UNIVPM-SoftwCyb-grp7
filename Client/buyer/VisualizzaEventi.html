@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet"href="http://localhost:8080/style">
+  <link rel="stylesheet"href="https://localhost:10001/style">
 </head>
 <body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script>
-      fetch("http://localhost:8080/eventi")
+      fetch("https://localhost:10001/eventi")
         .then(function (response) {
           return response.json();
         })
@@ -27,10 +27,10 @@
                     tr.append("<td>" + json[i].luogo + "</td>");
                     tr.append("<td>" + json[i].stato + "</td>");
                     if(json[i].stato == "inVendita"){
-                      tr.append("<td><button class=\"bottone\" onClick = \"window.location.href='http://localhost:8080/acquistabiglietto?address=" + json[i].address + "'\" >Compra</button>" +
+                      tr.append("<td><button class=\"bottone\" onClick = \"window.location.href='https://localhost:10001/acquistabiglietto?address=" + json[i].address + "'\" >Compra</button>" +
                                 "</td>");
                     } else {
-                      tr.append("<td><button class=\"bottoneDisabled\" onClick = \"window.location.href='http://localhost:8080/acquistabiglietto?address=" + json[i].address + "'\" disabled >Compra</button>" +
+                      tr.append("<td><button class=\"bottoneDisabled\" onClick = \"window.location.href='https://localhost:10001/acquistabiglietto?address=" + json[i].address + "'\" disabled >Compra</button>" +
                                 "</td>");
 
                     }
@@ -47,9 +47,9 @@
     </script>
 
 <ul>
-  <li><a href="http://localhost:8080/">Home</a></li>
-  <li><a class="active" href="http://localhost:8080/visualizzaeventi">Visualizza eventi disponibili</a></li>
-  <li><a href="http://localhost:8080/visualizzabiglietti">I miei biglietti</a></li>
+  <li><a href="https://localhost:10001/">Home</a></li>
+  <li><a class="active" href="https://localhost:10001/visualizzaeventi">Visualizza eventi disponibili</a></li>
+  <li><a href="https://localhost:10001/visualizzabiglietti">I miei biglietti</a></li>
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">

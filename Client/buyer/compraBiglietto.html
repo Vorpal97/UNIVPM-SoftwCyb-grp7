@@ -1,6 +1,6 @@
 <html>
   <head>
-    <link rel='stylesheet'href='http://localhost:8080/style'>
+    <link rel='stylesheet'href='https://localhost:10001/style'>
       <meta charset="UTF-8">
   </head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -28,7 +28,7 @@
       $("body").css("cursor", "progress");
       $.ajax({
          type: "POST",
-         url: "http://localhost:8080/acquista",
+         url: "https://localhost:10001/acquista",
          data: obj,
          success: function(d) {
            $("body").css("cursor", "default");
@@ -37,13 +37,13 @@
            console.log(d)
            if(d.stato == "successo"){
              alert("Biglietti acquistati correttamente!");
-             window.location.href='http://localhost:8080/visualizzaeventi';
+             window.location.href='https://localhost:10001/visualizzaeventi';
            } else if(d.stato == "erroreqta"){
              alert("Non puoi acquistare più di 10 biglietti!");
-             window.location.href='http://localhost:8080/visualizzaeventi';
+             window.location.href='https://localhost:10001/visualizzaeventi';
            } else {
              alert("Si è verificato un errore!");
-             window.location.href='https://www.youtube.com/watch?v=RvY5ploo1OI  ';
+             window.location.href='httpss://www.youtube.com/watch?v=RvY5ploo1OI  ';
 
            }
          }
@@ -51,7 +51,7 @@
     }
 
     function annulla(){
-      window.location.href='http://localhost:8080/visualizzaeventi';
+      window.location.href='https://localhost:10001/visualizzaeventi';
     }
 
     function incremento(){
@@ -77,9 +77,9 @@
   <body>
 
     <ul>
-      <li><a href='http://localhost:8080/'>Home</a></li>
-      <li><a href='http://localhost:8080/visualizzaeventi'>Visualizza eventi disponibili</a></li>
-      <li><a href='http://localhost:8080/visualizzabiglietti'>I miei biglietti</a></li>
+      <li><a href='https://localhost:10001/'>Home</a></li>
+      <li><a href='https://localhost:10001/visualizzaeventi'>Visualizza eventi disponibili</a></li>
+      <li><a href='https://localhost:10001/visualizzabiglietti'>I miei biglietti</a></li>
     </ul>
 
     <div style='padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;'>

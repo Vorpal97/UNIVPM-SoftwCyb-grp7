@@ -1,10 +1,27 @@
 const Web3 = require("web3");
-
+var fs = require('fs');
 var express = require('express');
 var bodyParser = require('body-parser');
+var http = require('http');
+var https = require('https');
 var serveStatic = require('serve-static');
-var app     = express();
 const path = require('path');
+
+var privateKey  = fs.readFileSync('./certs/selfsigned.key', 'utf8');
+var certificate = fs.readFileSync('./certs/selfsigned.crt', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+
+var app = express();
+
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+// httpServer.listen(8080, () => {
+//   console.log('Il client del Buyer è accessibile a http://127.0.0.1:8080/');
+// });
+httpsServer.listen(10001, () => {
+  console.log('Il client del Buyer è accessibile a https://127.0.0.1:10001/');
+});
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,6 +37,9 @@ const cont = new Contract_data();
 
 var abi = cont.abi;
 
+// app.listen(8080, function() {
+//   console.log('Il client del Buyer è accessibile a http://127.0.0.1:8080/');
+// });
 
 web3.eth.getAccounts().then((value)=> {
   console.log("Accounts: " + value);
@@ -128,7 +148,6 @@ function main(a){
 
   app.get('/eventi', async(req, res) => {
       var listaEventi = [];
-      fs = require('fs');
       var data = fs.readFileSync('contracts.json', 'utf8');
       listaEventi = data.split("\n")
       var o = [];
@@ -156,7 +175,6 @@ function main(a){
 
     evento = JSON.parse(evento);
 
-    fs = require('fs');
     var data = fs.readFileSync('../Client/buyer/compraBiglietto.html', 'utf8');
     data = data.replace("${address}", address);
     data = data.replace("${evento.nome}", evento.nome);
@@ -168,10 +186,6 @@ function main(a){
 
    res.setHeader('Content-Type', 'text/html');
    res.end(data);
-  });
-
-  app.listen(8080, function() {
-    console.log('Il client del Buyer è accessibile a http://127.0.0.1:8080/');
   });
 
   app.post("/acquista", async(req, res) => {
@@ -219,7 +233,6 @@ function main(a){
     app.get('/mytickets', async(req, res) => {
         var Contract = require('web3-eth-contract');
         Contract.setProvider(nodo);
-        const fs = require('fs');
         var data = fs.readFileSync('contracts.json', 'utf8');
         address = data.split("\n");
         address.pop()
