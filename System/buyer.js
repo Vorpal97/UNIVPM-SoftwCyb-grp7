@@ -180,6 +180,8 @@ function main(a){
     console.log("address: " + address)
     console.log("numbiglietti: " + numBiglietti)
     evento = await getEventData(address)
+    evento = JSON.parse(evento)
+    console.log("stato:" + evento.stato)
     if(evento.stato == "inVendita"){
       var Contract = require('web3-eth-contract');
       Contract.setProvider(nodo);
@@ -212,9 +214,6 @@ function main(a){
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify({stato:"errore"}));
     }
-
-
-
     });
 
     app.get('/mytickets', async(req, res) => {
