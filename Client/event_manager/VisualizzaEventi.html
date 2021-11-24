@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet"href="http://localhost:8080/style">
+<link rel="stylesheet"href="https://localhost:10000/style">
 </head>
 <body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script>
 
       function redistribuisci(address){
-        fetch("http://localhost:8080/redistribuisci?address=" + address)
+        fetch("https://localhost:10000/redistribuisci?address=" + address)
           .then(function (response) {
             return response.json();
           })
@@ -26,7 +26,7 @@
           });
       }
 
-      fetch("http://localhost:8080/eventi")
+      fetch("https://localhost:10000/eventi")
         .then(function (response) {
           return response.json();
         })
@@ -50,7 +50,7 @@
                       tr.append("<td><button id=\"btnredis\" class=\"bottone\" onClick = 'redistribuisci(\"" + json[i].address + "\"" + ")'\">Redistribuisci</button>" +
                                 "</td>");
                     } else {
-                      tr.append("<td><button class=\"bottone\" onClick = \"window.location.href='http://localhost:8080/modificaevento?address=" + json[i].address + "'\">Modifica</button>" +
+                      tr.append("<td><button class=\"bottone\" onClick = \"window.location.href='https://localhost:10000/modificaevento?address=" + json[i].address + "'\">Modifica</button>" +
                                 "</td>");
                     }
 
@@ -65,9 +65,9 @@
     </script>
 
 <ul>
-  <li><a href="http://localhost:8080/">Home</a></li>
-  <li><a href="http://localhost:8080/creaevento">Crea Evento</a></li>
-  <li><a class="active" href="http://localhost:8080/visualizzaeventi">Visualizza Eventi</a></li>
+  <li><a href="https://localhost:10000/">Home</a></li>
+  <li><a href="https://localhost:10000/creaevento">Crea Evento</a></li>
+  <li><a class="active" href="https://localhost:10000/visualizzaeventi">Visualizza Eventi</a></li>
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">

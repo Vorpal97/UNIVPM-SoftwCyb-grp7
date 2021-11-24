@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet"href="http://localhost:8080/style">
+<link rel="stylesheet"href="https://localhost:10000/style">
 </head>
 <body>
   <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
@@ -51,7 +51,7 @@
 
 
     function annulla(){
-      window.location.href='http://localhost:8080/visualizzaeventi';
+      window.location.href='https://localhost:10000/visualizzaeventi';
     }
 
     function inviaDati(){
@@ -73,13 +73,13 @@
             console.log(obj)
             $.ajax({
                type: "POST",
-               url: "http://localhost:8080/aggiornaevento",
+               url: "https://localhost:10000/aggiornaevento",
                data: obj,
                success: function(d) {
                  console.log(d)
                  if(d.stato == "successo"){
                    alert("Evento modificato correttamente!");
-                   window.location.href='http://localhost:8080/visualizzaeventi';
+                   window.location.href='https://localhost:10000/visualizzaeventi';
                  } else {
                    alert("Si è verificato un errore");
                  }
@@ -96,9 +96,9 @@
   </script>
 
 <ul>
-  <li><a href="http://localhost:8080/">Home</a></li>
-  <li><a href="http://localhost:8080/creaevento">Crea Evento</a></li>
-  <li><a href="http://localhost:8080/visualizzaeventi">Visualizza Eventi</a></li>
+  <li><a href="https://localhost:10000/">Home</a></li>
+  <li><a href="https://localhost:10000/creaevento">Crea Evento</a></li>
+  <li><a href="https://localhost:10000/visualizzaeventi">Visualizza Eventi</a></li>
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">
@@ -135,7 +135,6 @@
         <label for='cancellato'>Cancellato</label><br>
         <input type='radio' id = "radioterminato" name='stato' value='terminato'>
         <label for='terminato'>Terminato</label><br>
-        <!--<input type="submit" value="Modifica Evento">-->
       </form>
       <button class="bottone" onclick="inviaDati()"> Modifica evento </button>
       <button class="bottoneCanc" onclick="annulla()"> Annulla </button>
