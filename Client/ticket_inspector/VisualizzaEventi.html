@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet"href="http://localhost:8080/style">
+  <link rel="stylesheet"href="https://localhost:10002/style">
 </head>
 <body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script>
 
-      fetch("http://localhost:8080/eventi")
+      fetch("https://localhost:10002/eventi")
         .then(function (response) {
           return response.json();
         })
@@ -27,7 +27,7 @@
                     tr.append("<td>" + json[i].address + "</td>");
                     tr.append("<td>" + json[i].luogo + "</td>");
                     tr.append("<td>" + json[i].stato + "</td>");
-                    tr.append("<td><button class=\"bottone\" onClick = \"window.location.href='http://localhost:8080/visualizzabiglietti?address=" + json[i].address + "'\">Biglietti</button>" +
+                    tr.append("<td><button class=\"bottone\" onClick = \"window.location.href='https://localhost:10002/visualizzabiglietti?address=" + json[i].address + "'\">Biglietti</button>" +
                               "</td>");
 
                     $('table').append(tr);
@@ -41,8 +41,8 @@
     </script>
 
 <ul>
-  <li><a href="http://localhost:8080/">Home</a></li>
-  <li><a class="active" href="http://localhost:8080/visualizzaeventi">Vidima Biglietti</a></li>
+  <li><a href="https://localhost:10002/">Home</a></li>
+  <li><a class="active" href="https://localhost:10002/visualizzaeventi">Vidima Biglietti</a></li>
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">

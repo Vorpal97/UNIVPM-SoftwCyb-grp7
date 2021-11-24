@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet"href="http://localhost:8080/style">
+  <link rel="stylesheet"href="https://localhost:10002/style">
   <meta charset="UTF-8">
 </head>
 <body>
@@ -29,12 +29,12 @@
         } else {
             $.ajax({
                  type: "POST",
-                 url: "http://localhost:8080/vidimabiglietto",
+                 url: "https://localhost:10002/vidimabiglietto",
                  data: obj,
                  success: function(d) {
                    if(d.stato == "successo"){
                      console.log(d)
-                     alert("Evento vidimato correttamente!");
+                     alert("Biglietto vidimato correttamente!");
                      refresh(_address);
                    } else {
                      console.log(d)
@@ -47,7 +47,7 @@
 
       function refresh(address){
         $("#eventi tbody").remove();
-        fetch("http://localhost:8080/alltickets?address=" + address)
+        fetch("https://localhost:10002/alltickets?address=" + address)
           .then(function (response) {
             return response.json();
           })
@@ -98,8 +98,8 @@
 
 
 <ul>
-  <li><a href="http://localhost:8080/">Home</a></li>
-  <li><a class="active" href="http://localhost:8080/visualizzaeventi">Vidima Biglietti</a></li>
+  <li><a href="https://localhost:10002/">Home</a></li>
+  <li><a class="active" href="https://localhost:10002/visualizzaeventi">Vidima Biglietti</a></li>
 </ul>
 
 <div style="padding:20px;margin-top:30px;background-color:#1abc9c;height:1500px;">

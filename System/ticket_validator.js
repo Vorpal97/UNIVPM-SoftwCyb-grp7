@@ -1,13 +1,29 @@
 const Web3 = require("web3");
-
+var fs = require('fs');
 var express = require('express');
 var bodyParser = require('body-parser');
+var http = require('http');
+var https = require('https');
 var serveStatic = require('serve-static');
-var app     = express();
 const path = require('path');
+
+var privateKey  = fs.readFileSync('./certs/selfsigned.key', 'utf8');
+var certificate = fs.readFileSync('./certs/selfsigned.crt', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+
+var app = express();
+
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(10002, () => {
+  console.log('Il client del ticket_validator è accessibile a https://127.0.0.1:10002/');
+});
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json())
+
 
 let nodo = 'http://localhost:22003';
 
@@ -102,10 +118,6 @@ async function getEventData(address){
 
 function main(a){
 
-  app.listen(8080, function() {
-    console.log('Il client del Ticket Validator è accessibile a http://127.0.0.1:8080/');
-  });
-
   app.get('/', (req, res) => {
       res.sendFile(path.resolve('../Client/ticket_inspector/index.html'));
   });
@@ -123,7 +135,6 @@ function main(a){
         if(address == null)
           res.end("");
 
-        fs = require('fs');
         var data = fs.readFileSync('../Client/ticket_inspector/VisualizzaBiglietti.html', 'utf8');
         data = data.replace("${address}", address);
 
@@ -138,7 +149,6 @@ function main(a){
 
   app.get('/eventi', async(req, res) => {
       var listaEventi = [];
-      fs = require('fs');
       var data = fs.readFileSync('contracts.json', 'utf8');
       listaEventi = data.split("\n")
       var o = [];
