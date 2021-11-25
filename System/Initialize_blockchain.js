@@ -1,7 +1,7 @@
 async function main(){
   const Web3 = require("web3");
 
-  var numOfNodes = 4;
+  var numOfNodes = 3;
 
   const fs = require('fs');
 

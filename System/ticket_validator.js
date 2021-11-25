@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
 
 
-let nodo = 'http://localhost:22003';
+let nodo = 'http://localhost:22002';
 
 let web3 = new Web3(nodo);
 

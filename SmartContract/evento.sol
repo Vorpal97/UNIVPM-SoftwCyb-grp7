@@ -18,7 +18,6 @@ contract Evento {
 
     address eventManager;
     address buyer;
-    address reseller;
     address validator;
 
     enum status {inVendita, inCorso, sospeso, soldout, cancellato, terminato}
@@ -37,11 +36,10 @@ contract Evento {
 
 
     //INITIALIZATION
-    function setup(address payable _eventManager, address _buyer, address _reseller, address _validator) public {
+    function setup(address payable _eventManager, address _buyer, address _validator) public {
         if(initialization){
             eventManager = _eventManager;
             buyer = _buyer;
-            reseller = _reseller;
             validator = _validator;
             initialization = false;
         }
@@ -61,9 +59,6 @@ contract Evento {
     }
 
     //GETTER
-    function getAddresses() public view returns(address, address, address, address){
-      return (eventManager, buyer, reseller, validator);
-    }
 
     function getEventManager() public view returns (address) {
       return eventManager;
@@ -71,10 +66,6 @@ contract Evento {
 
     function getBuyer() public view returns (address) {
       return buyer;
-    }
-
-    function getReseller() public view returns (address) {
-      return reseller;
     }
 
     function getValidator() public view returns (address) {

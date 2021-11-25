@@ -63,7 +63,7 @@ function sleep(ms){
 function popList(list, pattern){
   var tmp = [];
   for(i = 0; i < list.length; i++){
-    if(list[i] != pattern){12
+    if(list[i] != pattern){
       tmp.push(list[i]);
     }
   }
@@ -437,14 +437,13 @@ function main(a){
 
         //SCRIVERE
 
-        await contract.methods.setup(a, address_list[0], address_list[1], address_list[2]).send({from: a})
+        await contract.methods.setup(a, address_list[0], address_list[1]).send({from: a})
         .on('receipt', function(){
 
           console.log("Address impostati: \n" +
                       " eventManager -> " + a +
                       "\n buyer - > " + address_list[0] +
-                      "\n reseller - > " + address_list[1] +
-                      "\n validator - > " + address_list[2]);
+                      "\n validator - > " + address_list[1]);
         });
 
         await contract.methods.creaEvento(nome, data, numPosti, prezzoBiglietto, luogo).send({from: a})
