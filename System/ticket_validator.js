@@ -17,7 +17,7 @@ var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
 httpsServer.listen(10002, () => {
-  console.log('Il client del ticket_validator è accessibile a https://127.0.0.1:10002/');
+  console.log('Il client del Ticket Validator è accessibile a https://127.0.0.1:10002/');
 });
 
 

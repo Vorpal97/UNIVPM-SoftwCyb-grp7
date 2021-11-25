@@ -48,7 +48,7 @@ contract Evento {
     }
 
     function creaEvento(string memory _nomeEvento, string memory _dataEvento, uint256 _numPosti, uint256 _prezzoBiglietto, string memory _luogo) public {
-      //if(msg.sender == eventManager){
+      if(msg.sender == eventManager){
         nomeEvento = _nomeEvento;
         dataEvento = _dataEvento;
         numPosti = _numPosti;
@@ -57,7 +57,7 @@ contract Evento {
         luogo = _luogo;
         stato = status.inVendita;
         ticketCounter = 0;
-      //}
+      }
     }
 
     //GETTER
@@ -114,18 +114,6 @@ contract Evento {
         return false;
       }
     }
-
-
-
-    /*function send() public payable {
-      if(msg.sender == eventManager){
-        uint256 tot = prezzoBiglietto*(numPosti - postiDisponibili);
-        uint256 toEvMan = (tot/100)*70;
-        uint256 toRes = (tot/100)*30;
-        eventManager.transfer(toEvMan);
-        eventManager.transfer(toRes);
-      }
-    }*/
 
     function getTicketCounter() public view returns (uint256){
         return ticketCounter;
@@ -245,7 +233,6 @@ contract Evento {
         pagato = true;
       }
     }
-
 
     //SERVICES
 

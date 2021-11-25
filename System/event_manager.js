@@ -20,7 +20,7 @@ var httpsServer = https.createServer(credentials, app);
 //   console.log('Il client del Buyer è accessibile a http://127.0.0.1:8080/');
 // });
 httpsServer.listen(10000, () => {
-  console.log('Il client del Buyer è accessibile a https://127.0.0.1:10000/');
+  console.log('Il client dell\' Event Manager è accessibile a https://127.0.0.1:10000/');
 });
 
 
