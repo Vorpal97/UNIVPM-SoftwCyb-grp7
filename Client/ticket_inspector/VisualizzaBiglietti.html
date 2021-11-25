@@ -17,6 +17,8 @@
       }
 
       function vidima(_address, _id){
+        $("#btnvidima").prop("disabled",true);
+
         obj = {
           address : _address,
           id : _id
@@ -70,7 +72,7 @@
                         tr.append("<td><button class=\"bottoneDisabled\" onClick = 'vidima(\"" + address + "\","+ json[i].id + ")'\" disabled>Vidimato</button>" +
                                 "</td>");
                       } else {
-                        tr.append("<td><button class=\"bottone\" onClick = 'vidima(\"" + address + "\","+ json[i].id + ")'\">Vidima</button>" +
+                        tr.append("<td><button id= \"btnvidima\" class=\"bottone\" onClick = 'vidima(\"" + address + "\","+ json[i].id + ")'\">Vidima</button>" +
                                 "</td>");
 
                       }
