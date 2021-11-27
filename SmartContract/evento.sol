@@ -263,7 +263,7 @@ contract Evento {
     }
 
     function redistribuisciIncassi() public view returns(int256){
-      if(msg.sender == eventManager){
+      if(msg.sender == eventManager && pagato == false){
           int256 t = int256((ticketCounter * prezzoBiglietto) / 2);
           return t;
       }
