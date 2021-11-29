@@ -1,0 +1,29 @@
+{
+  "name": "UNIVPM-SoftwCyb-grp7",
+  "version": "1.0.0",
+  "description": "Manuel Manelli, Simone Cappella, Cristian Colavito, Fiorenza Bocchini, Prof. Luca Spalazzi ## Operazioni preliminari ### 1. Scaricare e installare sulla propria macchina l'ambiente [NodeJS](https://nodejs.org/en/ \"NodeJS\"). ### 2. Digitare dal terminale, in una nuova cartella, il comando `npx quorum-wizard` e selezionare la prima scelta denominata Quickstart ### 3. Dalla cartella corrente eseguire il comando `cd network/3-nodes-quickstart` per posizionarsi nella cartella contenente gli script di configurazione di Quorum ### 4. Digitare il comando `./start.sh` per avviare la Blockchain (`./stop.sh` per arrestarla)",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "http": "^0.0.1-security",
+    "prompt-sync": "^4.2.0",
+    "serve-static": "^1.14.1",
+    "web3": "^1.5.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vorpal97/UNIVPM-SoftwCyb-grp7.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vorpal97/UNIVPM-SoftwCyb-grp7/issues"
+  },
+  "homepage": "https://github.com/Vorpal97/UNIVPM-SoftwCyb-grp7#readme"
+}

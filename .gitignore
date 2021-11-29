@@ -1,5 +1,4 @@
 
 node_modules/*
-package-lock.json
 System/accounts.txt
 System/contracts.json
