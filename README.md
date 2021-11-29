@@ -1,7 +1,7 @@
-# Progetto di Software Cybersecurity. Anno Accademico 2020/2021
+# Progetto di Software Cybersecurity. A.A. 2020/2021
 Manuel Manelli, Simone Cappella, Cristian Colavito, Fiorenza Bocchini, Prof. Luca Spalazzi
 ## Operazioni preliminari
-### 1. Scaricare e installare sulla propria macchina l'ambiente [NodeJS](https://nodejs.org/en/ "NodeJS").
+### 1. Scaricare e installare sulla propria macchina l'ambiente [NodeJS](https://nodejs.org/en/ "NodeJS"), versione LTS.
 ### 2. Digitare dal terminale, in una nuova cartella, il comando `npx quorum-wizard` e selezionare la prima scelta denominata Quickstart
 ### 3. Dalla cartella corrente eseguire il comando `cd network/3-nodes-quickstart` per posizionarsi nella cartella contenente gli script di configurazione di Quorum
 ### 4. Digitare il comando `./start.sh` per avviare la Blockchain (`./stop.sh` per arrestarla)
@@ -26,5 +26,5 @@ Manuel Manelli, Simone Cappella, Cristian Colavito, Fiorenza Bocchini, Prof. Luc
 ------------
 
 ## Avvertenze
-### 1. Il Browser potrebbe non riconoscere l'autenticità del certificato x509 utilizzato per la connessione HTTPS in quanto generato ed autofirmato da noi, per aggirare il problema è sufficiente aggiungere l'eccezione alla lista dei certificati del browser per procedere.
+### 1. Il Browser potrebbe non riconoscere l'autenticità del certificato x509 utilizzato per la connessione HTTPS in quanto generato ed autofirmato da noi, per aggirare il problema è sufficiente procedere ugualmente oppure aggiungere l'eccezione alla lista dei certificati del browser per procedere.
 ### 2. La repo include sia il certificato x509 che la chiave privata utilizzati dal modulo Express per abilitare la navigazione in HTTPS. Per semplificare la procedura di installazione abbiamo deciso comunque di includerli ed esporre la chiave privata pubblicamente, cosa assolutamente da non fare in un contesto di utilizzo reale.
